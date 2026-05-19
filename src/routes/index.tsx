@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, Compass, GraduationCap, Stethoscope, BookOpen, Target, ClipboardCheck } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { topics } from "@/data/topics";
 

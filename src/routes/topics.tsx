@@ -135,7 +135,7 @@ function TopicCard({ topic }: { topic: Topic }) {
         to="/topics"
         className="mt-6 inline-flex h-10 items-center justify-center rounded-md bg-primary text-sm font-medium text-primary-foreground transition hover:bg-secondary"
       >
-        Start studying →
+        Start studying <ArrowRight className="ml-2 h-4 w-4" />
       </Link>
     </div>
   );
