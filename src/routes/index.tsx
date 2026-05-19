@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { topics } from "@/data/topics";
 
@@ -47,7 +48,7 @@ function HomePage() {
                 to="/topics"
                 className="inline-flex h-12 items-center rounded-md bg-gold px-6 font-medium text-primary shadow-elegant transition hover:brightness-105"
               >
-                Start reviewing →
+                Start reviewing <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <a
                 href="#diagnostic"
@@ -109,14 +110,14 @@ function HomePage() {
                 <p className="mt-2 text-sm text-muted-foreground">{t.description}</p>
                 <div className="mt-6 flex items-center justify-between text-xs text-muted-foreground">
                   <span>{t.modules} modules · {t.questions} items</span>
-                  <span className="text-accent transition group-hover:translate-x-0.5">Explore →</span>
+                  <span className="inline-flex items-center gap-1 text-accent transition group-hover:translate-x-0.5">Explore <ArrowRight className="h-3.5 w-3.5" /></span>
                 </div>
               </Link>
             ))}
           </div>
           <div className="mt-10">
-            <Link to="/topics" className="text-sm font-medium text-accent hover:underline">
-              See all topics →
+            <Link to="/topics" className="inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline">
+              See all topics <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
@@ -165,7 +166,7 @@ function HomePage() {
                   to="/topics"
                   className="inline-flex h-12 items-center rounded-md bg-gold px-6 font-medium text-primary shadow-elegant transition hover:brightness-105"
                 >
-                  Start diagnostic →
+                  Start diagnostic <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </div>
             </div>
@@ -248,8 +249,8 @@ function LevelCard({
       </div>
       <div className="mt-3 font-display text-2xl font-semibold text-white">{level}</div>
       <p className="mt-2 text-sm text-white/70">{blurb}</p>
-      <div className="mt-5 text-sm font-medium text-gold transition group-hover:translate-x-0.5">
-        Browse topics →
+      <div className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-gold transition group-hover:translate-x-0.5">
+        Browse topics <ArrowRight className="h-4 w-4" />
       </div>
     </Link>
   );

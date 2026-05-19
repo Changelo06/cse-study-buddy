@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { topics, type Topic } from "@/data/topics";
 
@@ -134,7 +135,7 @@ function TopicCard({ topic }: { topic: Topic }) {
         to="/topics"
         className="mt-6 inline-flex h-10 items-center justify-center rounded-md bg-primary text-sm font-medium text-primary-foreground transition hover:bg-secondary"
       >
-        Start studying →
+        Start studying <ArrowRight className="ml-2 h-4 w-4" />
       </Link>
     </div>
   );
