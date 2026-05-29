@@ -34,7 +34,7 @@ function TopicsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background bg-paper-grid">
       <SiteHeader />
 
       <section className="border-b border-border/60 bg-surface">

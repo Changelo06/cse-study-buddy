@@ -26,7 +26,7 @@ function HomePage() {
   const featured = topics.slice(0, 6);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background bg-paper-grid">
       <SiteHeader />
 
       {/* HERO */}
@@ -233,11 +233,10 @@ function LevelCard({
   return (
     <Link
       to={href}
-      className={`group relative block overflow-hidden rounded-2xl border p-6 backdrop-blur transition hover:-translate-y-0.5 ${
-        accent
+      className={`group relative block overflow-hidden rounded-2xl border p-6 backdrop-blur transition hover:-translate-y-0.5 ${accent
           ? "border-gold/40 bg-white/10"
           : "border-white/15 bg-white/5 hover:bg-white/10"
-      }`}
+        }`}
     >
       <div className="flex items-center justify-between">
         <div className="text-xs uppercase tracking-widest text-white/70">Exam level</div>

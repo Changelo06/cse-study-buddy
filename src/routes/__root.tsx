@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 
+import { FloatingNav } from "@/components/FloatingNav";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -114,6 +115,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <FloatingNav />
     </QueryClientProvider>
   );
 }

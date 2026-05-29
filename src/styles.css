@@ -53,16 +53,20 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.05 265);
 
-  --primary: oklch(0.24 0.08 265);              /* Deep navy #0f1b3d */
+  --primary: oklch(0.24 0.08 265);
+  /* Deep navy #0f1b3d */
   --primary-foreground: oklch(0.98 0.01 240);
 
-  --secondary: oklch(0.34 0.09 255);            /* #1e3a5f */
+  --secondary: oklch(0.34 0.09 255);
+  /* #1e3a5f */
   --secondary-foreground: oklch(0.98 0.01 240);
 
-  --accent: oklch(0.56 0.11 245);               /* #3b6fa0 */
+  --accent: oklch(0.56 0.11 245);
+  /* #3b6fa0 */
   --accent-foreground: oklch(0.98 0.01 240);
 
-  --gold: oklch(0.82 0.13 80);                  /* Filipino accent */
+  --gold: oklch(0.82 0.13 80);
+  /* Filipino accent */
 
   --muted: oklch(0.94 0.012 245);
   --muted-foreground: oklch(0.46 0.04 260);
@@ -76,8 +80,8 @@
 
   --gradient-hero: linear-gradient(135deg, oklch(0.22 0.08 265) 0%, oklch(0.34 0.09 255) 55%, oklch(0.46 0.11 250) 100%);
   --gradient-mesh: radial-gradient(at 20% 10%, oklch(0.56 0.11 245 / 0.35) 0px, transparent 50%),
-                   radial-gradient(at 80% 0%, oklch(0.82 0.13 80 / 0.18) 0px, transparent 50%),
-                   radial-gradient(at 90% 80%, oklch(0.34 0.09 255 / 0.4) 0px, transparent 50%);
+    radial-gradient(at 80% 0%, oklch(0.82 0.13 80 / 0.18) 0px, transparent 50%),
+    radial-gradient(at 90% 80%, oklch(0.34 0.09 255 / 0.4) 0px, transparent 50%);
 
   --shadow-elegant: 0 10px 40px -12px oklch(0.24 0.08 265 / 0.25);
   --shadow-card: 0 1px 2px oklch(0.24 0.08 265 / 0.06), 0 8px 24px -12px oklch(0.24 0.08 265 / 0.12);
@@ -108,16 +112,24 @@
   * {
     border-color: var(--color-border);
   }
+
   html {
     scroll-behavior: smooth;
   }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
@@ -133,21 +145,34 @@
 @utility bg-hero {
   background-image: var(--gradient-hero);
 }
+
 @utility bg-mesh {
   background-image: var(--gradient-mesh);
 }
+
 @utility shadow-elegant {
   box-shadow: var(--shadow-elegant);
 }
+
 @utility shadow-card {
   box-shadow: var(--shadow-card);
 }
+
 @utility text-gold {
   color: var(--color-gold);
 }
+
 @utility bg-gold {
   background-color: var(--color-gold);
 }
+
 @utility bg-surface {
   background-color: var(--color-surface);
+}
+
+@utility bg-paper-grid {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
 }
