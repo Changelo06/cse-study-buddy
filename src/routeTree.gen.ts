@@ -14,6 +14,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TopicsIndexRouteImport } from './routes/topics.index'
 import { Route as TopicsTopicIdRouteImport } from './routes/topics.$topicId'
+import { Route as QuizzesQuizIdRouteImport } from './routes/quizzes.$quizId'
 import { Route as TopicsTopicIdModulesModuleIdRouteImport } from './routes/topics.$topicId.modules.$moduleId'
 import { Route as TopicsTopicIdFinalExamLevelIdRouteImport } from './routes/topics.$topicId.final-exam.$levelId'
 import { Route as TopicsTopicIdModulesModuleIdExamRouteImport } from './routes/topics.$topicId.modules.$moduleId.exam'
@@ -44,6 +45,11 @@ const TopicsTopicIdRoute = TopicsTopicIdRouteImport.update({
   path: '/topics/$topicId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuizzesQuizIdRoute = QuizzesQuizIdRouteImport.update({
+  id: '/$quizId',
+  path: '/$quizId',
+  getParentRoute: () => QuizzesRoute,
+} as any)
 const TopicsTopicIdModulesModuleIdRoute =
   TopicsTopicIdModulesModuleIdRouteImport.update({
     id: '/modules/$moduleId',
@@ -72,7 +78,8 @@ const TopicsTopicIdModulesModuleIdQuizQuizIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
-  '/quizzes': typeof QuizzesRoute
+  '/quizzes': typeof QuizzesRouteWithChildren
+  '/quizzes/$quizId': typeof QuizzesQuizIdRoute
   '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
   '/topics/': typeof TopicsIndexRoute
   '/topics/$topicId/final-exam/$levelId': typeof TopicsTopicIdFinalExamLevelIdRoute
@@ -83,7 +90,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
-  '/quizzes': typeof QuizzesRoute
+  '/quizzes': typeof QuizzesRouteWithChildren
+  '/quizzes/$quizId': typeof QuizzesQuizIdRoute
   '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
   '/topics': typeof TopicsIndexRoute
   '/topics/$topicId/final-exam/$levelId': typeof TopicsTopicIdFinalExamLevelIdRoute
@@ -95,7 +103,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
-  '/quizzes': typeof QuizzesRoute
+  '/quizzes': typeof QuizzesRouteWithChildren
+  '/quizzes/$quizId': typeof QuizzesQuizIdRoute
   '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
   '/topics/': typeof TopicsIndexRoute
   '/topics/$topicId/final-exam/$levelId': typeof TopicsTopicIdFinalExamLevelIdRoute
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/'
     | '/profile'
     | '/quizzes'
+    | '/quizzes/$quizId'
     | '/topics/$topicId'
     | '/topics/'
     | '/topics/$topicId/final-exam/$levelId'
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/'
     | '/profile'
     | '/quizzes'
+    | '/quizzes/$quizId'
     | '/topics/$topicId'
     | '/topics'
     | '/topics/$topicId/final-exam/$levelId'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/'
     | '/profile'
     | '/quizzes'
+    | '/quizzes/$quizId'
     | '/topics/$topicId'
     | '/topics/'
     | '/topics/$topicId/final-exam/$levelId'
@@ -142,7 +154,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProfileRoute: typeof ProfileRoute
-  QuizzesRoute: typeof QuizzesRoute
+  QuizzesRoute: typeof QuizzesRouteWithChildren
   TopicsTopicIdRoute: typeof TopicsTopicIdRouteWithChildren
   TopicsIndexRoute: typeof TopicsIndexRoute
 }
@@ -184,6 +196,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TopicsTopicIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quizzes/$quizId': {
+      id: '/quizzes/$quizId'
+      path: '/$quizId'
+      fullPath: '/quizzes/$quizId'
+      preLoaderRoute: typeof QuizzesQuizIdRouteImport
+      parentRoute: typeof QuizzesRoute
+    }
     '/topics/$topicId/modules/$moduleId': {
       id: '/topics/$topicId/modules/$moduleId'
       path: '/modules/$moduleId'
@@ -214,6 +233,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface QuizzesRouteChildren {
+  QuizzesQuizIdRoute: typeof QuizzesQuizIdRoute
+}
+
+const QuizzesRouteChildren: QuizzesRouteChildren = {
+  QuizzesQuizIdRoute: QuizzesQuizIdRoute,
+}
+
+const QuizzesRouteWithChildren =
+  QuizzesRoute._addFileChildren(QuizzesRouteChildren)
 
 interface TopicsTopicIdModulesModuleIdRouteChildren {
   TopicsTopicIdModulesModuleIdExamRoute: typeof TopicsTopicIdModulesModuleIdExamRoute
@@ -251,7 +281,7 @@ const TopicsTopicIdRouteWithChildren = TopicsTopicIdRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProfileRoute: ProfileRoute,
-  QuizzesRoute: QuizzesRoute,
+  QuizzesRoute: QuizzesRouteWithChildren,
   TopicsTopicIdRoute: TopicsTopicIdRouteWithChildren,
   TopicsIndexRoute: TopicsIndexRoute,
 }

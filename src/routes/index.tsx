@@ -1,87 +1,161 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: DashboardPage,
 });
 
+const lessonRows = [
+  { name: "English", topicId: "english", modules: 58, quiz: 38, rIndex: 37, trend: "up" },
+  { name: "Filipino", topicId: "filipino", modules: 86, quiz: 82, rIndex: 86, trend: "up" },
+  { name: "Mathematics", topicId: "math", modules: 24, quiz: 9, rIndex: 20, trend: "down" },
+  { name: "Clerical Ops", topicId: "clerical", modules: 62, quiz: 25, rIndex: 56, trend: "up" },
+  { name: "Gen Info", topicId: "geninfo", modules: 79, quiz: 66, rIndex: 79, trend: "up" },
+  { name: "Logic Analysis", topicId: "logic", modules: 12, quiz: 13, rIndex: 15, trend: "down" },
+];
+
+const planActions = [
+  { label: "Ethics & Laws", meta: "Weakness", color: "bg-brand-pink", to: "/topics/ethics", status: true },
+  { label: "Filipino", meta: "Strength", color: "bg-brand-yellow", to: "/topics/filipino", status: true },
+  { label: "Flashcards", color: "bg-brand-blue", to: "/topics" },
+  { label: "Timed challenge", color: "bg-brand-teal", to: "/quizzes" },
+  { label: "Games", color: "bg-brand-purple", to: "/quizzes" },
+];
+
+function ProgressPill({ value }: { value: number }) {
+  return (
+    <div className="h-5 w-full overflow-hidden rounded-full bg-[#fff4ca]">
+      <div className="h-full rounded-full bg-brand-purple" style={{ width: `${value}%` }} />
+    </div>
+  );
+}
+
 function DashboardPage() {
   return (
-    <div className="container-page py-12 relative">
-      {/* 98% Stamp on top right corner */}
-      <div className="absolute -top-18 -right-20 pointer-events-none opacity-90 rotate-12 z-20">
-        <svg width="500" height="450" viewBox="0 0 180 100" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="90" cy="50" rx="85" ry="45" fill="none" stroke="#ff4f6a" strokeWidth="4" strokeDasharray="10 8" />
-          <text x="50%" y="65%" textAnchor="middle" fill="#ff4f6a" fontFamily="Nunito" fontSize="56" fontWeight="900" style={{ letterSpacing: "-0.05em" }}>
-            98%
-          </text>
-        </svg>
-      </div>
+    <main className="container-page pb-8 pt-3 md:pb-12">
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-[170px_230px_minmax(330px,1fr)_minmax(330px,1fr)] lg:gap-5">
+        <div className="flex min-h-[138px] flex-col items-center justify-center rounded-[1.45rem] bg-brand-teal p-4 shadow-sticker">
+          <div className="font-display text-6xl font-black leading-none text-cartoon md:text-[4.6rem]">98.2</div>
+          <p className="mt-3 text-center text-sm font-bold uppercase leading-4 text-brand-ink">
+            Readiness
+            <br />
+            Score
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-
-        {/* Top Row */}
-        <div className="md:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-
-          {/* Stats Block */}
-          <div className="bg-brand-teal rounded-[2rem] p-6 shadow-soft flex justify-between items-center relative overflow-hidden" style={{ minHeight: "140px" }}>
-            <div className="flex-1 flex flex-col items-center justify-center border-r-2 border-brand-ink/50 border-dashed border-spacing-2 relative">
-              <span className="font-display font-black text-5xl text-brand-ink leading-none">14</span>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-brand-ink mt-2">MODULES</span>
-            </div>
-            <div className="flex-1 flex flex-col items-center justify-center border-r-2 border-brand-ink/50 border-dashed relative">
-              <span className="font-display font-black text-5xl text-brand-ink leading-none">5</span>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-brand-ink mt-2">TESTS</span>
-            </div>
-            <div className="flex-1 flex flex-col items-center justify-center relative">
-              <span className="font-display font-black text-5xl text-brand-ink leading-none">5</span>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-brand-ink mt-2">TESTS</span>
-            </div>
+        <div className="grid min-h-[138px] grid-cols-2 overflow-hidden rounded-[1.45rem] bg-brand-pink shadow-sticker">
+          <div className="flex flex-col items-center justify-center border-r-2 border-brand-ink/55 px-4 py-5">
+            <span className="font-display text-6xl font-black leading-none text-cartoon md:text-[4.6rem]">30</span>
+            <span className="mt-3 text-sm font-bold uppercase text-brand-ink">Modules</span>
           </div>
-
-          {/* Yellow Block */}
-          <div className="bg-brand-yellow rounded-[2rem] p-6 shadow-soft relative" style={{ minHeight: "140px" }}>
-            <div className="absolute bottom-4 right-4 bg-brand-pink rounded-full w-16 h-6"></div>
-          </div>
-
-          {/* Blue Block */}
-          <div className="bg-brand-blue rounded-[2rem] p-6 shadow-soft relative" style={{ minHeight: "140px" }}>
-            <div className="absolute bottom-4 right-4 bg-brand-pink rounded-full w-16 h-6"></div>
+          <div className="flex flex-col items-center justify-center px-4 py-5">
+            <span className="font-display text-6xl font-black leading-none text-cartoon md:text-[4.6rem]">13</span>
+            <span className="mt-3 text-sm font-bold uppercase text-brand-ink">Tests</span>
           </div>
         </div>
 
-        {/* Bottom Row */}
-        <div className="md:col-span-8">
-          <div className="bg-white rounded-[2rem] p-8 shadow-soft h-full min-h-[400px]">
-            <h2 className="font-display font-black text-3xl text-brand-ink mb-8">My Lessons</h2>
+        <div className="flex min-h-[138px] flex-col justify-between rounded-[1.45rem] bg-brand-yellow p-5 shadow-sticker">
+          <h2 className="max-w-[26rem] font-display text-[1.7rem] font-black uppercase leading-[1.02] text-cartoon md:text-[2rem]">
+            Module 1: Grammar and Language
+          </h2>
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <p className="text-sm font-bold uppercase tracking-wide text-brand-ink">Last lesson opened</p>
+            <Link
+              to="/topics/english/modules/mod-eng-1"
+              className="rounded-xl bg-brand-pink px-4 py-2 text-sm font-bold uppercase text-white shadow-[3px_3px_0_rgba(45,45,45,0.16)] transition-transform hover:-translate-y-0.5"
+            >
+              Continue
+            </Link>
+          </div>
+        </div>
 
-            <div className="space-y-6">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="flex justify-end">
-                  <div className="bg-brand-ink/60 rounded-full w-8 h-8 flex items-center justify-center text-white">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M9 18l6-6-6-6" />
-                    </svg>
-                  </div>
+        <div className="flex min-h-[138px] flex-col justify-between rounded-[1.45rem] bg-brand-blue p-5 shadow-sticker">
+          <h2 className="max-w-[24rem] font-display text-[1.7rem] font-black uppercase leading-[1.02] text-cartoon md:text-[2rem]">
+            ENG5261: Diddy Language
+          </h2>
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <p className="text-sm font-bold uppercase tracking-wide text-brand-ink">New tests available</p>
+            <Link
+              to="/quizzes"
+              className="rounded-xl bg-brand-pink px-4 py-2 text-sm font-bold uppercase text-white shadow-[3px_3px_0_rgba(45,45,45,0.16)] transition-transform hover:-translate-y-0.5"
+            >
+              Continue
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,2.05fr)_minmax(340px,0.95fr)]">
+        <div className="rounded-[1.65rem] bg-white p-5 shadow-sticker md:p-6">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+            <h1 className="text-3xl font-bold text-brand-ink md:text-[2.35rem]">My Lessons</h1>
+            <Link
+              to="/topics"
+              className="border-b-2 border-brand-pink text-sm font-bold text-brand-pink"
+            >
+              View Lessons
+            </Link>
+          </div>
+
+          <div className="hidden grid-cols-[1.3fr_120px_120px_90px_34px] items-center gap-8 px-3 pb-1 text-center text-lg font-bold text-brand-ink md:grid">
+            <span />
+            <span>Modules</span>
+            <span>Quiz</span>
+            <span>R-Index</span>
+            <span />
+          </div>
+
+          <div className="divide-y divide-brand-ink/65">
+            {lessonRows.map((lesson) => (
+              <div
+                key={lesson.name}
+                className="grid gap-3 py-2.5 md:grid-cols-[1.3fr_120px_120px_90px_34px] md:items-center md:gap-8"
+              >
+                <p className="text-lg font-bold uppercase text-brand-ink">{lesson.name}</p>
+                <ProgressPill value={lesson.modules} />
+                <ProgressPill value={lesson.quiz} />
+                <div className="flex items-center gap-2 md:justify-center">
+                  <span className="text-2xl font-bold text-brand-ink">{lesson.rIndex}%</span>
+                  <span
+                    className={`grid h-4 w-4 place-items-center rounded-full text-[10px] font-black text-white ${
+                      lesson.trend === "up" ? "bg-brand-teal" : "bg-brand-pink"
+                    }`}
+                  >
+                    {lesson.trend === "up" ? "^" : "!"}
+                  </span>
                 </div>
-              ))}
-            </div>
+                <Link
+                  to="/topics/$topicId"
+                  params={{ topicId: lesson.topicId }}
+                  className="grid h-7 w-7 place-items-center rounded-full bg-brand-ink/65 text-lg font-black text-white transition-transform hover:-translate-y-0.5"
+                  aria-label={`Open ${lesson.name}`}
+                >
+                  &gt;
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="md:col-span-4">
-          <div className="bg-brand-ink rounded-[2rem] p-8 shadow-soft h-full min-h-[400px]">
-            <h2 className="font-display font-black text-3xl text-white mb-8">My study plan</h2>
-
-            <div className="space-y-4">
-              <div className="bg-brand-pink h-12 rounded-full w-full"></div>
-              <div className="bg-brand-yellow h-12 rounded-full w-full"></div>
-              <div className="bg-brand-blue h-12 rounded-full w-full"></div>
-              <div className="bg-brand-teal h-12 rounded-full w-full"></div>
-            </div>
+        <aside className="rounded-[1.65rem] bg-[#fff5cc] p-6 shadow-sticker">
+          <h2 className="text-3xl font-bold text-brand-ink md:text-[2.35rem]">My study plan</h2>
+          <div className="mt-6 space-y-3">
+            {planActions.map((action) => (
+              <Link
+                key={action.label}
+                to={action.to}
+                className={`${action.color} flex min-h-12 items-center justify-between rounded-xl px-4 py-3 text-base font-bold text-white shadow-[3px_4px_0_rgba(45,45,45,0.12)] transition-transform hover:-translate-y-0.5`}
+              >
+                <span>{action.label}</span>
+                {action.status ? (
+                  <span className="text-sm">{action.meta}</span>
+                ) : (
+                  <span className="text-2xl leading-none">-&gt;</span>
+                )}
+              </Link>
+            ))}
           </div>
-        </div>
-
-      </div>
-    </div>
+        </aside>
+      </section>
+    </main>
   );
 }

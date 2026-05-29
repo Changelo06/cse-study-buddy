@@ -130,6 +130,15 @@ export const topicsData: Topic[] = [
     finalExams: [],
   },
   {
+    id: "logic",
+    title: "Logic Analysis",
+    description: "Logical reasoning, analogies, syllogisms, and pattern analysis.",
+    bgColor: "bg-brand-orange",
+    icon: "Lo",
+    modules: [],
+    finalExams: [],
+  },
+  {
     id: "geninfo",
     title: "General Info",
     description: "Current events, Philippine history, geography, and cultural literacy.",

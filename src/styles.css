@@ -1,7 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -14,8 +14,8 @@
 }
 
 @theme inline {
-  --font-display: "Nunito", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Comica", "Fredoka", ui-rounded, system-ui, sans-serif;
+  --font-sans: "Fredoka", ui-rounded, system-ui, sans-serif;
 
   --color-background: #f9f6e6;
   --color-foreground: #2d2d2d;
@@ -31,8 +31,9 @@
   --color-brand-purple: #b0a3f6;
   --color-brand-ink: #2d2d2d;
   --color-brand-paper: #f9f6e6;
+  --color-brand-cream: #fff6cf;
 
-  --color-primary: #4a78f5;
+  --color-primary: #2d2d2d;
   --color-primary-foreground: #ffffff;
   --color-secondary: #f6bb39;
   --color-secondary-foreground: #ffffff;
@@ -42,7 +43,8 @@
   --color-border: #e2dfd0;
   --color-ring: #4a78f5;
 
-  --shadow-soft: 0 10px 20px rgba(0, 0, 0, 0.05);
+  --shadow-soft: 0 16px 28px rgba(45, 45, 45, 0.14);
+  --shadow-sticker: 5px 7px 0 rgba(45, 45, 45, 0.08);
 }
 
 @layer base {
@@ -74,25 +76,46 @@
   inset: 0;
   pointer-events: none;
   z-index: -1;
-  opacity: 0.35;
+  opacity: 0.13;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 @utility container-page {
   width: 100%;
   margin-inline: auto;
-  max-width: 80rem;
-  padding-inline: 1.5rem;
+  max-width: 92rem;
+  padding-inline: 0.875rem;
 }
 
 @utility shadow-soft {
   box-shadow: var(--shadow-soft);
 }
 
+@utility shadow-sticker {
+  box-shadow: var(--shadow-sticker), var(--shadow-soft);
+}
+
 @utility bg-paper-grid {
-  background-size: 60px 60px;
+  background-color: #fbf4dc;
+  background-size: 46px 46px;
   background-image:
-    linear-gradient(to right, rgba(0,0,0, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,0,0, 0.1) 1px, transparent 1px);
+    linear-gradient(to right, rgba(45, 45, 45, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(45, 45, 45, 0.07) 1px, transparent 1px);
   position: relative;
+}
+
+@utility text-cartoon {
+  color: white;
+  text-shadow:
+    -2px -2px 0 var(--color-brand-ink),
+    2px -2px 0 var(--color-brand-ink),
+    -2px 2px 0 var(--color-brand-ink),
+    2px 2px 0 var(--color-brand-ink),
+    0 3px 0 var(--color-brand-ink);
+}
+
+@media (min-width: 768px) {
+  .container-page {
+    padding-inline: 1.25rem;
+  }
 }
