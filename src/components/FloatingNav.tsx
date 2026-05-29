@@ -1,43 +1,44 @@
-import { Link } from "@tanstack/react-router";
-import { Home, Library, LayoutDashboard, CheckSquare } from "lucide-react";
+import { Link, useLocation } from "@tanstack/react-router";
 
 export function FloatingNav() {
-  return (
-    <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
-      <nav className="flex items-center gap-1 rounded-full border border-border/40 bg-background/80 p-1.5 shadow-elegant backdrop-blur-xl">
-        <NavLink to="/" icon={<Home className="h-[18px] w-[18px]" />} label="Home" exact />
-        <NavLink to="/dashboard" icon={<LayoutDashboard className="h-[18px] w-[18px]" />} label="Dashboard" />
-        <NavLink to="/topics" icon={<Library className="h-[18px] w-[18px]" />} label="Topics" />
-        <NavLink to="/quizzes" icon={<CheckSquare className="h-[18px] w-[18px]" />} label="Quizzes" />
-      </nav>
-    </div>
-  );
-}
+  const location = useLocation();
 
-function NavLink({
-  to,
-  icon,
-  label,
-  exact = false,
-}: {
-  to: string;
-  icon: React.ReactNode;
-  label: string;
-  exact?: boolean;
-}) {
+  const links = [
+    { label: "Home", to: "/" },
+    { label: "Lessons", to: "/topics" },
+    { label: "Quizes", to: "/quizzes" },
+    { label: "Profile", to: "/profile" },
+  ];
+
   return (
-    <Link
-      to={to}
-      activeProps={{
-        className: "bg-surface text-foreground font-medium shadow-sm",
-      }}
-      activeOptions={{ exact }}
-      className="group flex flex-col items-center justify-center gap-1 rounded-full px-4 py-2.5 text-muted-foreground transition-all hover:bg-surface/50 hover:text-foreground md:flex-row md:gap-2.5 md:px-5 md:py-2"
-    >
-      <div className="transition-transform group-hover:scale-110 group-active:scale-95">
-        {icon}
+    <div className="w-full pt-8 pb-4 px-8 flex items-center justify-between sticky top-0 z-50">
+      <div className="font-display font-bold text-lg text-brand-ink">
+        CSE Ready Logo
       </div>
-      <span className="text-[10px] md:text-sm">{label}</span>
-    </Link>
+      
+      <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white border-3 border-brand-ink rounded-full px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
+        {links.map((link) => {
+          // Exact match for Home, partial match for others if needed, but exact is safer here
+          const isActive = location.pathname === link.to;
+          
+          return (
+            <Link
+              key={link.label}
+              to={link.to}
+              className={`px-5 py-2 rounded-full font-display font-bold transition-colors ${
+                isActive 
+                  ? "bg-brand-purple text-brand-ink" 
+                  : "text-brand-ink hover:bg-black/5"
+              }`}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Empty div to balance flex-between */}
+      <div className="w-[120px]"></div>
+    </div>
   );
 }

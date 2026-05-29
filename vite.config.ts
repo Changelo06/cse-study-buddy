@@ -1,15 +1,26 @@
-// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
-// or the app will break with duplicate plugins:
-//   - tanstackStart, viteReact, tailwindcss, tsConfigPaths, cloudflare (build-only),
-//     componentTagger (dev-only), VITE_* env injection, @ path alias, React/TanStack dedupe,
-//     error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... } }) if needed.
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import crypto from "crypto";
+if (!("hash" in crypto)) {
+  (crypto as any).hash = (algo: string, data: import("crypto").BinaryLike, enc: import("crypto").BinaryToTextEncoding = "hex") => 
+    crypto.createHash(algo).update(data as any).digest(enc);
+}
 
-// Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-// @cloudflare/vite-plugin builds from this — wrangler.jsonc main alone is insufficient.
+import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
+import tsConfigPaths from "vite-tsconfig-paths";
+import react from "@vitejs/plugin-react";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+
 export default defineConfig({
-  tanstackStart: {
-    server: { entry: "server" },
+  plugins: [
+    tailwindcss(),
+    tsConfigPaths(),
+    tanstackStart({
+      server: { entry: "server" },
+    }),
+    react(),
+  ],
+  server: {
+    port: 8080,
+    strictPort: true,
   },
 });

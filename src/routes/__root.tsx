@@ -101,7 +101,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="bg-paper-grid min-h-screen">
         {children}
         <Scripts />
       </body>
@@ -114,8 +114,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
       <FloatingNav />
+      <Outlet />
     </QueryClientProvider>
   );
 }

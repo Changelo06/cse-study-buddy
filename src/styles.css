@@ -1,111 +1,48 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
+  --font-display: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-gold: var(--gold);
-  --color-surface: var(--surface);
+
+  /* Playful Theme Colors */
+  --color-brand-blue: #4a78f5;
+  --color-brand-yellow: #f6bb39;
+  --color-brand-pink: #ff4f6a;
+  --color-brand-teal: #3fcaba;
+  --color-brand-orange: #ff9d3a;
+  --color-brand-purple: #b0a3f6;
+  --color-brand-ink: #2d2d2d;
+  --color-brand-paper: #f9f6e6;
+
+  --color-primary: var(--brand-blue);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--brand-yellow);
+  --color-secondary-foreground: #ffffff;
+  --color-muted: rgba(0,0,0, 0.1);
+  --color-muted-foreground: rgba(0,0,0, 0.5);
+  
+  --color-border: #e2dfd0;
+  --color-ring: var(--brand-blue);
+
+  --shadow-soft: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
 :root {
-  --radius: 0.75rem;
-
-  /* Navy Trust palette */
-  --background: oklch(0.985 0.005 240);
-  --foreground: oklch(0.18 0.05 265);
-
-  --surface: oklch(0.96 0.012 245);
-
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.05 265);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.05 265);
-
-  --primary: oklch(0.24 0.08 265);
-  /* Deep navy #0f1b3d */
-  --primary-foreground: oklch(0.98 0.01 240);
-
-  --secondary: oklch(0.34 0.09 255);
-  /* #1e3a5f */
-  --secondary-foreground: oklch(0.98 0.01 240);
-
-  --accent: oklch(0.56 0.11 245);
-  /* #3b6fa0 */
-  --accent-foreground: oklch(0.98 0.01 240);
-
-  --gold: oklch(0.82 0.13 80);
-  /* Filipino accent */
-
-  --muted: oklch(0.94 0.012 245);
-  --muted-foreground: oklch(0.46 0.04 260);
-
-  --destructive: oklch(0.6 0.22 25);
-  --destructive-foreground: oklch(0.98 0.01 240);
-
-  --border: oklch(0.9 0.015 245);
-  --input: oklch(0.9 0.015 245);
-  --ring: oklch(0.56 0.11 245);
-
-  --gradient-hero: linear-gradient(135deg, oklch(0.22 0.08 265) 0%, oklch(0.34 0.09 255) 55%, oklch(0.46 0.11 250) 100%);
-  --gradient-mesh: radial-gradient(at 20% 10%, oklch(0.56 0.11 245 / 0.35) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, oklch(0.82 0.13 80 / 0.18) 0px, transparent 50%),
-    radial-gradient(at 90% 80%, oklch(0.34 0.09 255 / 0.4) 0px, transparent 50%);
-
-  --shadow-elegant: 0 10px 40px -12px oklch(0.24 0.08 265 / 0.25);
-  --shadow-card: 0 1px 2px oklch(0.24 0.08 265 / 0.06), 0 8px 24px -12px oklch(0.24 0.08 265 / 0.12);
-}
-
-.dark {
-  --background: oklch(0.16 0.04 265);
-  --foreground: oklch(0.96 0.01 240);
-  --surface: oklch(0.2 0.05 265);
-  --card: oklch(0.22 0.06 265);
-  --card-foreground: oklch(0.96 0.01 240);
-  --popover: oklch(0.22 0.06 265);
-  --popover-foreground: oklch(0.96 0.01 240);
-  --primary: oklch(0.96 0.01 240);
-  --primary-foreground: oklch(0.22 0.06 265);
-  --secondary: oklch(0.3 0.06 260);
-  --secondary-foreground: oklch(0.96 0.01 240);
-  --accent: oklch(0.56 0.11 245);
-  --accent-foreground: oklch(0.98 0.01 240);
-  --muted: oklch(0.26 0.05 260);
-  --muted-foreground: oklch(0.7 0.03 260);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.56 0.11 245);
+  --background: #f9f6e6;
+  --foreground: #2d2d2d;
+  --card: #ffffff;
+  --card-foreground: #2d2d2d;
+  --border: #e2dfd0;
 }
 
 @layer base {
@@ -124,14 +61,8 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
   }
 }
 
@@ -142,37 +73,26 @@
   padding-inline: 1.5rem;
 }
 
-@utility bg-hero {
-  background-image: var(--gradient-hero);
-}
-
-@utility bg-mesh {
-  background-image: var(--gradient-mesh);
-}
-
-@utility shadow-elegant {
-  box-shadow: var(--shadow-elegant);
-}
-
-@utility shadow-card {
-  box-shadow: var(--shadow-card);
-}
-
-@utility text-gold {
-  color: var(--color-gold);
-}
-
-@utility bg-gold {
-  background-color: var(--color-gold);
-}
-
-@utility bg-surface {
-  background-color: var(--color-surface);
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
 }
 
 @utility bg-paper-grid {
-  background-size: 40px 40px;
+  background-size: 60px 60px;
   background-image:
-    linear-gradient(to right, var(--color-border) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0,0,0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0, 0.04) 1px, transparent 1px);
+  /* Fallback subtle paper texture using SVG filter over grid */
+  position: relative;
+}
+
+@utility bg-paper-grid::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.4;
+  /* SVG noise for texture */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
