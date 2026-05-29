@@ -9,16 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TopicsRouteImport } from './routes/topics'
 import { Route as QuizzesRouteImport } from './routes/quizzes'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TopicsIndexRouteImport } from './routes/topics.index'
+import { Route as TopicsTopicIdRouteImport } from './routes/topics.$topicId'
+import { Route as TopicsTopicIdModulesModuleIdRouteImport } from './routes/topics.$topicId.modules.$moduleId'
+import { Route as TopicsTopicIdFinalExamLevelIdRouteImport } from './routes/topics.$topicId.final-exam.$levelId'
+import { Route as TopicsTopicIdModulesModuleIdExamRouteImport } from './routes/topics.$topicId.modules.$moduleId.exam'
+import { Route as TopicsTopicIdModulesModuleIdQuizQuizIdRouteImport } from './routes/topics.$topicId.modules.$moduleId.quiz.$quizId'
 
-const TopicsRoute = TopicsRouteImport.update({
-  id: '/topics',
-  path: '/topics',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const QuizzesRoute = QuizzesRouteImport.update({
   id: '/quizzes',
   path: '/quizzes',
@@ -34,50 +34,121 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TopicsIndexRoute = TopicsIndexRouteImport.update({
+  id: '/topics/',
+  path: '/topics/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicsTopicIdRoute = TopicsTopicIdRouteImport.update({
+  id: '/topics/$topicId',
+  path: '/topics/$topicId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicsTopicIdModulesModuleIdRoute =
+  TopicsTopicIdModulesModuleIdRouteImport.update({
+    id: '/modules/$moduleId',
+    path: '/modules/$moduleId',
+    getParentRoute: () => TopicsTopicIdRoute,
+  } as any)
+const TopicsTopicIdFinalExamLevelIdRoute =
+  TopicsTopicIdFinalExamLevelIdRouteImport.update({
+    id: '/final-exam/$levelId',
+    path: '/final-exam/$levelId',
+    getParentRoute: () => TopicsTopicIdRoute,
+  } as any)
+const TopicsTopicIdModulesModuleIdExamRoute =
+  TopicsTopicIdModulesModuleIdExamRouteImport.update({
+    id: '/exam',
+    path: '/exam',
+    getParentRoute: () => TopicsTopicIdModulesModuleIdRoute,
+  } as any)
+const TopicsTopicIdModulesModuleIdQuizQuizIdRoute =
+  TopicsTopicIdModulesModuleIdQuizQuizIdRouteImport.update({
+    id: '/quiz/$quizId',
+    path: '/quiz/$quizId',
+    getParentRoute: () => TopicsTopicIdModulesModuleIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
   '/quizzes': typeof QuizzesRoute
-  '/topics': typeof TopicsRoute
+  '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
+  '/topics/': typeof TopicsIndexRoute
+  '/topics/$topicId/final-exam/$levelId': typeof TopicsTopicIdFinalExamLevelIdRoute
+  '/topics/$topicId/modules/$moduleId': typeof TopicsTopicIdModulesModuleIdRouteWithChildren
+  '/topics/$topicId/modules/$moduleId/exam': typeof TopicsTopicIdModulesModuleIdExamRoute
+  '/topics/$topicId/modules/$moduleId/quiz/$quizId': typeof TopicsTopicIdModulesModuleIdQuizQuizIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
   '/quizzes': typeof QuizzesRoute
-  '/topics': typeof TopicsRoute
+  '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
+  '/topics': typeof TopicsIndexRoute
+  '/topics/$topicId/final-exam/$levelId': typeof TopicsTopicIdFinalExamLevelIdRoute
+  '/topics/$topicId/modules/$moduleId': typeof TopicsTopicIdModulesModuleIdRouteWithChildren
+  '/topics/$topicId/modules/$moduleId/exam': typeof TopicsTopicIdModulesModuleIdExamRoute
+  '/topics/$topicId/modules/$moduleId/quiz/$quizId': typeof TopicsTopicIdModulesModuleIdQuizQuizIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
   '/quizzes': typeof QuizzesRoute
-  '/topics': typeof TopicsRoute
+  '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
+  '/topics/': typeof TopicsIndexRoute
+  '/topics/$topicId/final-exam/$levelId': typeof TopicsTopicIdFinalExamLevelIdRoute
+  '/topics/$topicId/modules/$moduleId': typeof TopicsTopicIdModulesModuleIdRouteWithChildren
+  '/topics/$topicId/modules/$moduleId/exam': typeof TopicsTopicIdModulesModuleIdExamRoute
+  '/topics/$topicId/modules/$moduleId/quiz/$quizId': typeof TopicsTopicIdModulesModuleIdQuizQuizIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile' | '/quizzes' | '/topics'
+  fullPaths:
+    | '/'
+    | '/profile'
+    | '/quizzes'
+    | '/topics/$topicId'
+    | '/topics/'
+    | '/topics/$topicId/final-exam/$levelId'
+    | '/topics/$topicId/modules/$moduleId'
+    | '/topics/$topicId/modules/$moduleId/exam'
+    | '/topics/$topicId/modules/$moduleId/quiz/$quizId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile' | '/quizzes' | '/topics'
-  id: '__root__' | '/' | '/profile' | '/quizzes' | '/topics'
+  to:
+    | '/'
+    | '/profile'
+    | '/quizzes'
+    | '/topics/$topicId'
+    | '/topics'
+    | '/topics/$topicId/final-exam/$levelId'
+    | '/topics/$topicId/modules/$moduleId'
+    | '/topics/$topicId/modules/$moduleId/exam'
+    | '/topics/$topicId/modules/$moduleId/quiz/$quizId'
+  id:
+    | '__root__'
+    | '/'
+    | '/profile'
+    | '/quizzes'
+    | '/topics/$topicId'
+    | '/topics/'
+    | '/topics/$topicId/final-exam/$levelId'
+    | '/topics/$topicId/modules/$moduleId'
+    | '/topics/$topicId/modules/$moduleId/exam'
+    | '/topics/$topicId/modules/$moduleId/quiz/$quizId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProfileRoute: typeof ProfileRoute
   QuizzesRoute: typeof QuizzesRoute
-  TopicsRoute: typeof TopicsRoute
+  TopicsTopicIdRoute: typeof TopicsTopicIdRouteWithChildren
+  TopicsIndexRoute: typeof TopicsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/topics': {
-      id: '/topics'
-      path: '/topics'
-      fullPath: '/topics'
-      preLoaderRoute: typeof TopicsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/quizzes': {
       id: '/quizzes'
       path: '/quizzes'
@@ -99,14 +170,90 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/topics/': {
+      id: '/topics/'
+      path: '/topics'
+      fullPath: '/topics/'
+      preLoaderRoute: typeof TopicsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topics/$topicId': {
+      id: '/topics/$topicId'
+      path: '/topics/$topicId'
+      fullPath: '/topics/$topicId'
+      preLoaderRoute: typeof TopicsTopicIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topics/$topicId/modules/$moduleId': {
+      id: '/topics/$topicId/modules/$moduleId'
+      path: '/modules/$moduleId'
+      fullPath: '/topics/$topicId/modules/$moduleId'
+      preLoaderRoute: typeof TopicsTopicIdModulesModuleIdRouteImport
+      parentRoute: typeof TopicsTopicIdRoute
+    }
+    '/topics/$topicId/final-exam/$levelId': {
+      id: '/topics/$topicId/final-exam/$levelId'
+      path: '/final-exam/$levelId'
+      fullPath: '/topics/$topicId/final-exam/$levelId'
+      preLoaderRoute: typeof TopicsTopicIdFinalExamLevelIdRouteImport
+      parentRoute: typeof TopicsTopicIdRoute
+    }
+    '/topics/$topicId/modules/$moduleId/exam': {
+      id: '/topics/$topicId/modules/$moduleId/exam'
+      path: '/exam'
+      fullPath: '/topics/$topicId/modules/$moduleId/exam'
+      preLoaderRoute: typeof TopicsTopicIdModulesModuleIdExamRouteImport
+      parentRoute: typeof TopicsTopicIdModulesModuleIdRoute
+    }
+    '/topics/$topicId/modules/$moduleId/quiz/$quizId': {
+      id: '/topics/$topicId/modules/$moduleId/quiz/$quizId'
+      path: '/quiz/$quizId'
+      fullPath: '/topics/$topicId/modules/$moduleId/quiz/$quizId'
+      preLoaderRoute: typeof TopicsTopicIdModulesModuleIdQuizQuizIdRouteImport
+      parentRoute: typeof TopicsTopicIdModulesModuleIdRoute
+    }
   }
 }
+
+interface TopicsTopicIdModulesModuleIdRouteChildren {
+  TopicsTopicIdModulesModuleIdExamRoute: typeof TopicsTopicIdModulesModuleIdExamRoute
+  TopicsTopicIdModulesModuleIdQuizQuizIdRoute: typeof TopicsTopicIdModulesModuleIdQuizQuizIdRoute
+}
+
+const TopicsTopicIdModulesModuleIdRouteChildren: TopicsTopicIdModulesModuleIdRouteChildren =
+  {
+    TopicsTopicIdModulesModuleIdExamRoute:
+      TopicsTopicIdModulesModuleIdExamRoute,
+    TopicsTopicIdModulesModuleIdQuizQuizIdRoute:
+      TopicsTopicIdModulesModuleIdQuizQuizIdRoute,
+  }
+
+const TopicsTopicIdModulesModuleIdRouteWithChildren =
+  TopicsTopicIdModulesModuleIdRoute._addFileChildren(
+    TopicsTopicIdModulesModuleIdRouteChildren,
+  )
+
+interface TopicsTopicIdRouteChildren {
+  TopicsTopicIdFinalExamLevelIdRoute: typeof TopicsTopicIdFinalExamLevelIdRoute
+  TopicsTopicIdModulesModuleIdRoute: typeof TopicsTopicIdModulesModuleIdRouteWithChildren
+}
+
+const TopicsTopicIdRouteChildren: TopicsTopicIdRouteChildren = {
+  TopicsTopicIdFinalExamLevelIdRoute: TopicsTopicIdFinalExamLevelIdRoute,
+  TopicsTopicIdModulesModuleIdRoute:
+    TopicsTopicIdModulesModuleIdRouteWithChildren,
+}
+
+const TopicsTopicIdRouteWithChildren = TopicsTopicIdRoute._addFileChildren(
+  TopicsTopicIdRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProfileRoute: ProfileRoute,
   QuizzesRoute: QuizzesRoute,
-  TopicsRoute: TopicsRoute,
+  TopicsTopicIdRoute: TopicsTopicIdRouteWithChildren,
+  TopicsIndexRoute: TopicsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

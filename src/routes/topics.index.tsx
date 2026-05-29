@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/topics")({
+export const Route = createFileRoute("/topics/")({
   component: LessonsPage,
 });
 
@@ -72,9 +72,11 @@ function LessonsPage() {
     <div className="container-page py-12">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {lessonCards.map((card) => (
-          <div
+          <Link
             key={card.id}
-            className={`relative overflow-hidden rounded-[2.5rem] ${card.bgColor} p-8 shadow-soft cursor-pointer hover:scale-[1.02] transition-transform`}
+            to="/topics/$topicId"
+            params={{ topicId: card.id }}
+            className={`block relative overflow-hidden rounded-[2.5rem] ${card.bgColor} p-8 shadow-soft cursor-pointer hover:scale-[1.02] transition-transform`}
             style={{ minHeight: "320px" }}
           >
             {/* Top Right Badge */}
@@ -106,7 +108,7 @@ function LessonsPage() {
                 {card.title}
               </h2>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
