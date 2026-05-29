@@ -12,9 +12,9 @@ export function FloatingNav() {
 
   return (
     <div className="w-full pt-8 pb-4 px-8 flex items-center justify-between sticky top-0 z-50">
-      <div className="font-display font-bold text-lg text-brand-ink">
-        CSE Ready Logo
-      </div>
+      <Link to="/" className="flex items-center -ml-4">
+        <img src="/logo.png" alt="CSE Ready Logo" className="h-36 w-auto object-contain drop-shadow-sm" />
+      </Link>
       
       <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white border-3 border-brand-ink rounded-full px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
         {links.map((link) => {

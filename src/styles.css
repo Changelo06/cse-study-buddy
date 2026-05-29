@@ -5,14 +5,22 @@
 
 @custom-variant dark (&:is(.dark *));
 
+:root {
+  --background: #f9f6e6;
+  --foreground: #2d2d2d;
+  --card: #ffffff;
+  --card-foreground: #2d2d2d;
+  --border: #e2dfd0;
+}
+
 @theme inline {
   --font-display: "Nunito", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
+  --color-background: #f9f6e6;
+  --color-foreground: #2d2d2d;
+  --color-card: #ffffff;
+  --color-card-foreground: #2d2d2d;
 
   /* Playful Theme Colors */
   --color-brand-blue: #4a78f5;
@@ -24,25 +32,17 @@
   --color-brand-ink: #2d2d2d;
   --color-brand-paper: #f9f6e6;
 
-  --color-primary: var(--brand-blue);
+  --color-primary: #4a78f5;
   --color-primary-foreground: #ffffff;
-  --color-secondary: var(--brand-yellow);
+  --color-secondary: #f6bb39;
   --color-secondary-foreground: #ffffff;
   --color-muted: rgba(0,0,0, 0.1);
   --color-muted-foreground: rgba(0,0,0, 0.5);
   
   --color-border: #e2dfd0;
-  --color-ring: var(--brand-blue);
+  --color-ring: #4a78f5;
 
   --shadow-soft: 0 10px 20px rgba(0, 0, 0, 0.05);
-}
-
-:root {
-  --background: #f9f6e6;
-  --foreground: #2d2d2d;
-  --card: #ffffff;
-  --card-foreground: #2d2d2d;
-  --border: #e2dfd0;
 }
 
 @layer base {
@@ -64,6 +64,18 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
   }
+
+}
+
+/* Paper noise texture overlay — must be outside @layer to match utility specificity */
+.bg-paper-grid::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 @utility container-page {
@@ -80,19 +92,7 @@
 @utility bg-paper-grid {
   background-size: 60px 60px;
   background-image:
-    linear-gradient(to right, rgba(0,0,0, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,0,0, 0.04) 1px, transparent 1px);
-  /* Fallback subtle paper texture using SVG filter over grid */
+    linear-gradient(to right, rgba(0,0,0, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0, 0.1) 1px, transparent 1px);
   position: relative;
-}
-
-@utility bg-paper-grid::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0.4;
-  /* SVG noise for texture */
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
