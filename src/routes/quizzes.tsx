@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { PageDoodles } from "@/components/Doodles";
 
 export const Route = createFileRoute("/quizzes")({
   component: QuizzesPage,
@@ -21,26 +22,26 @@ export type PracticeQuiz = {
 };
 
 export const quizzes: PracticeQuiz[] = [
-  quiz("quiz-verbal-1", "Didy Language", "easy", "10 mins", "verbal", "English", 10, "#3F73F2", "blue"),
-  quiz("quiz-verbal-2", "Alquin Language", "medium", "30 mins", "verbal", "English", 15, "#3F73F2", "blue"),
-  quiz("quiz-verbal-3", "Winston's Theory", "hard", "1 hour", "verbal", "English", 20, "#3F73F2", "blue"),
-  quiz("quiz-terms-1", "Terms & Definition", "easy", "10 mins", "verbal", "General", 10, "#32C7B8", "blue"),
-  quiz("quiz-hr-1", "Kat's HR Analysis", "medium", "30 mins", "multiple", "General", 15, "#32C7B8", "blue"),
-  quiz("quiz-interest-1", "Basic Interest", "hard", "1 hour", "numerical", "Mathematics", 20, "#32C7B8", "blue"),
+  quiz("quiz-verbal-1", "Blue Grammar Sprint", "easy", "10 mins", "verbal", "English", 10, "#3F73F2", "blue"),
+  quiz("quiz-verbal-2", "Blue Reading Drill", "medium", "30 mins", "verbal", "English", 15, "#3F73F2", "blue"),
+  quiz("quiz-verbal-3", "Blue Verbal Mastery", "hard", "1 hour", "verbal", "English", 20, "#3F73F2", "blue"),
+  quiz("quiz-terms-1", "Teal Word Bank", "easy", "10 mins", "verbal", "General", 10, "#32C7B8", "blue"),
+  quiz("quiz-hr-1", "Teal Situation Check", "medium", "30 mins", "multiple", "General", 15, "#32C7B8", "blue"),
+  quiz("quiz-interest-1", "Teal Number Sense", "hard", "1 hour", "numerical", "Mathematics", 20, "#32C7B8", "blue"),
 
-  quiz("quiz-yellow-1", "Didy Language", "easy", "10 mins", "verbal", "Filipino", 10, "#F7C933", "yellow"),
-  quiz("quiz-yellow-2", "Alquin Language", "medium", "30 mins", "verbal", "Filipino", 15, "#F7C933", "yellow"),
-  quiz("quiz-yellow-3", "Winston's Theory", "hard", "1 hour", "verbal", "Filipino", 20, "#F7C933", "yellow"),
-  quiz("quiz-orange-1", "Didy Language", "easy", "10 mins", "multiple", "Logic", 10, "#FFA51F", "yellow"),
-  quiz("quiz-orange-2", "Alquin Language", "medium", "30 mins", "gen info", "General Info", 15, "#FFA51F", "yellow"),
-  quiz("quiz-orange-3", "Winston's Theory", "hard", "1 hour", "gen info", "General Info", 20, "#FFA51F", "yellow"),
+  quiz("quiz-yellow-1", "Yellow Filipino Basics", "easy", "10 mins", "verbal", "Filipino", 10, "#F7C933", "yellow"),
+  quiz("quiz-yellow-2", "Yellow Wika Builder", "medium", "30 mins", "verbal", "Filipino", 15, "#F7C933", "yellow"),
+  quiz("quiz-yellow-3", "Yellow Filipino Mastery", "hard", "1 hour", "verbal", "Filipino", 20, "#F7C933", "yellow"),
+  quiz("quiz-orange-1", "Orange Logic Starter", "easy", "10 mins", "multiple", "Logic", 10, "#FFA51F", "yellow"),
+  quiz("quiz-orange-2", "Orange Gen Info Mix", "medium", "30 mins", "gen info", "General Info", 15, "#FFA51F", "yellow"),
+  quiz("quiz-orange-3", "Orange Review Challenge", "hard", "1 hour", "gen info", "General Info", 20, "#FFA51F", "yellow"),
 
-  quiz("quiz-red-1", "Didy Language", "easy", "10 mins", "multiple", "Logic", 10, "#FF4D5A", "red"),
-  quiz("quiz-red-2", "Alquin Language", "medium", "30 mins", "multiple", "Logic", 15, "#FF4D5A", "red"),
-  quiz("quiz-red-3", "Winston's Theory", "hard", "1 hour", "multiple", "Logic", 20, "#FF4D5A", "red"),
-  quiz("quiz-pink-1", "Didy Language", "easy", "10 mins", "gen info", "General Info", 10, "#FF3366", "red"),
-  quiz("quiz-pink-2", "Alquin Language", "medium", "30 mins", "gen info", "General Info", 15, "#FF3366", "red"),
-  quiz("quiz-pink-3", "Winston's Theory", "hard", "1 hour", "gen info", "General Info", 20, "#FF3366", "red"),
+  quiz("quiz-red-1", "Red Logic Warmup", "easy", "10 mins", "multiple", "Logic", 10, "#FF4D5A", "red"),
+  quiz("quiz-red-2", "Red Pattern Drill", "medium", "30 mins", "multiple", "Logic", 15, "#FF4D5A", "red"),
+  quiz("quiz-red-3", "Red Analysis Trial", "hard", "1 hour", "multiple", "Logic", 20, "#FF4D5A", "red"),
+  quiz("quiz-pink-1", "Pink Gen Info Quickie", "easy", "10 mins", "gen info", "General Info", 10, "#FF3366", "red"),
+  quiz("quiz-pink-2", "Pink Current Affairs", "medium", "30 mins", "gen info", "General Info", 15, "#FF3366", "red"),
+  quiz("quiz-pink-3", "Pink Knowledge Check", "hard", "1 hour", "gen info", "General Info", 20, "#FF3366", "red"),
 ];
 
 const listFilters = ["All", "Easy", "Medium", "Hard", "Verbal", "Numerical", "Gen Info", "Multiple"] as const;
@@ -96,20 +97,23 @@ function QuizzesPage() {
   }, [activeFilter, search]);
 
   return (
-    <main className="container-page pb-10 pt-2 md:pb-14">
-      <QuizPageHeader viewMode={viewMode} onToggle={() => setViewMode((mode) => (mode === "cards" ? "list" : "cards"))} />
+    <main className="container-page relative pb-10 pt-2 md:pb-14">
+      <PageDoodles variant="quizzes" />
+      <div className="relative z-10">
+        <QuizPageHeader viewMode={viewMode} onToggle={() => setViewMode((mode) => (mode === "cards" ? "list" : "cards"))} />
 
-      {viewMode === "cards" ? (
-        <QuizGrid />
-      ) : (
-        <QuizList
-          activeFilter={activeFilter}
-          filteredQuizzes={filteredQuizzes}
-          search={search}
-          setActiveFilter={setActiveFilter}
-          setSearch={setSearch}
-        />
-      )}
+        {viewMode === "cards" ? (
+          <QuizGrid />
+        ) : (
+          <QuizList
+            activeFilter={activeFilter}
+            filteredQuizzes={filteredQuizzes}
+            search={search}
+            setActiveFilter={setActiveFilter}
+            setSearch={setSearch}
+          />
+        )}
+      </div>
     </main>
   );
 }
@@ -129,20 +133,16 @@ function QuizPageHeader({ viewMode, onToggle }: { viewMode: "cards" | "list"; on
 }
 
 function QuizGrid() {
-  const columns = [
-    quizzes.filter((quizItem) => quizItem.group === "blue"),
-    quizzes.filter((quizItem) => quizItem.group === "yellow"),
-    quizzes.filter((quizItem) => quizItem.group === "red"),
-  ];
+  const blueColumn = quizzes.filter((quizItem) => quizItem.group === "blue");
+  const yellowColumn = quizzes.filter((quizItem) => quizItem.group === "yellow");
+  const redQuizzes = quizzes.filter((quizItem) => quizItem.group === "red");
+  const coralColumn = redQuizzes.filter((quizItem) => quizItem.color === "#FF4D5A");
+  const pinkColumn = redQuizzes.filter((quizItem) => quizItem.color === "#FF3366");
 
   return (
-    <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
-      {columns.map((column, index) => (
-        <div key={index} className="space-y-4">
-          {column.map((quizItem) => (
+    <section className="mx-auto max-w-[54rem] space-y-4">
+      {[blueColumn, yellowColumn, coralColumn, pinkColumn].flat().map((quizItem) => (
             <QuizCard key={quizItem.id} quiz={quizItem} />
-          ))}
-        </div>
       ))}
     </section>
   );

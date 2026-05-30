@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { PageDoodles } from "@/components/Doodles";
 
 export const Route = createFileRoute("/topics/")({
   component: LessonsPage,
@@ -174,8 +175,9 @@ function LessonsPage() {
   const hasActiveSearch = search.trim().length > 0 || activeFilter !== "All";
 
   return (
-    <main className="container-page pb-9 pt-2 md:pb-12">
-      <div className="mb-3 flex justify-end pr-1 md:mb-4 md:pr-2">
+    <main className="container-page relative pb-9 pt-2 md:pb-12">
+      <PageDoodles variant="lessons" />
+      <div className="relative z-10 mb-3 flex justify-end pr-1 md:mb-4 md:pr-2">
         <button
           type="button"
           onClick={() => setViewMode((current) => (current === "grid" ? "list" : "grid"))}
@@ -205,7 +207,7 @@ function LessonsPage() {
 
 function CardGrid() {
   return (
-    <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
+    <section className="relative z-10 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
       {subjects.slice(0, 6).map((card) => (
         <Link
           key={card.id}
@@ -255,7 +257,7 @@ function LessonsLibrary({
   setSearch: (value: string) => void;
 }) {
   return (
-    <section className="mx-auto max-w-[70rem]">
+    <section className="relative z-10 mx-auto max-w-[70rem]">
       <div className="rounded-[1.45rem] bg-white/80 p-4 shadow-sticker md:p-6">
         <h1 className="font-display text-4xl font-black leading-none text-brand-ink md:text-5xl">
           Lessons Library

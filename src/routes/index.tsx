@@ -1,4 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { PageDoodles } from "@/components/Doodles";
 
 export const Route = createFileRoute("/")({
   component: DashboardPage,
@@ -31,8 +32,9 @@ function ProgressPill({ value }: { value: number }) {
 
 function DashboardPage() {
   return (
-    <main className="container-page pb-8 pt-3 md:pb-12">
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-[170px_230px_minmax(330px,1fr)_minmax(330px,1fr)] lg:gap-5">
+    <main className="container-page relative pb-8 pt-3 md:pb-12">
+      <PageDoodles variant="dashboard" />
+      <section className="relative z-10 grid grid-cols-1 gap-4 lg:grid-cols-[170px_230px_minmax(330px,1fr)_minmax(330px,1fr)] lg:gap-5">
         <div className="flex min-h-[138px] flex-col items-center justify-center rounded-[1.45rem] bg-brand-teal p-4 shadow-sticker">
           <div className="font-display text-6xl font-black leading-none text-cartoon md:text-[4.6rem]">98.2</div>
           <p className="mt-3 text-center text-sm font-bold uppercase leading-4 text-brand-ink">
@@ -84,7 +86,7 @@ function DashboardPage() {
         </div>
       </section>
 
-      <section className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,2.05fr)_minmax(340px,0.95fr)]">
+      <section className="relative z-10 mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,2.05fr)_minmax(340px,0.95fr)]">
         <div className="rounded-[1.65rem] bg-white p-5 shadow-sticker md:p-6">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <h1 className="text-3xl font-bold text-brand-ink md:text-[2.35rem]">My Lessons</h1>

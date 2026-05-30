@@ -30,12 +30,16 @@ export function FloatingNav() {
 
   return (
     <div
-      className={`sticky top-0 z-50 flex w-full items-center justify-between px-5 pb-3 pt-4 transition-transform duration-300 ease-out md:px-8 ${
+      className={`sticky top-0 z-50 flex w-full items-center justify-between px-5 pb-1 pt-[15px] transition-transform duration-300 ease-out md:px-8 ${
         isHidden ? "-translate-y-full" : "translate-y-0"
       }`}
     >
-      <Link to="/" className="flex items-center">
-        <img src="/logo.png" alt="CSE Ready Logo" className="h-16 w-auto object-contain drop-shadow-sm md:h-[5.6rem]" />
+      <Link to="/" className="relative z-10 flex h-24 w-56 items-center overflow-visible md:h-28 md:w-72">
+        <img
+          src="/cse-ready-logo.svg"
+          alt="CSE Ready Logo"
+          className="h-28 w-auto origin-left scale-[1.53] object-contain drop-shadow-sm md:h-40 md:scale-[1.665]"
+        />
       </Link>
       
       <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full border-2 border-brand-ink bg-white px-5 py-2.5 shadow-[4px_4px_0_rgba(45,45,45,0.1)] md:min-w-[520px] md:justify-center">
@@ -59,7 +63,7 @@ export function FloatingNav() {
         })}
       </div>
 
-      <div className="w-16 md:w-[5.6rem]" />
+      <div className="w-56 md:w-72" />
     </div>
   );
 }

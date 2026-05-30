@@ -142,7 +142,7 @@ export const topicsData: Topic[] = [
     id: "geninfo",
     title: "General Info",
     description: "Current events, Philippine history, geography, and cultural literacy.",
-    bgColor: "bg-brand-orange",
+    bgColor: "bg-[#ff3f77]",
     icon: "Gi",
     modules: [],
     finalExams: [],
