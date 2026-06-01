@@ -10,6 +10,7 @@ import {
 
 import { FloatingNav } from "@/components/FloatingNav";
 import { ScrollDashIndicator } from "@/components/ScrollDashIndicator";
+import InteractivePaperDots from "@/components/ui/interactive-paper-dots";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -125,6 +126,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <InteractivePaperDots />
       <FloatingNav />
       <ScrollDashIndicator />
       <Outlet />
