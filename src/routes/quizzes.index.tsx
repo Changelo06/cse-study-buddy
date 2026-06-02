@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageDoodles } from "@/components/Doodles";
 
-export const Route = createFileRoute("/quizzes")({
+export const Route = createFileRoute("/quizzes/")({
   component: QuizzesPage,
 });
 

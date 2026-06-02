@@ -9,10 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as QuizzesRouteImport } from './routes/quizzes'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TopicsIndexRouteImport } from './routes/topics.index'
+import { Route as QuizzesIndexRouteImport } from './routes/quizzes.index'
 import { Route as TopicsTopicIdRouteImport } from './routes/topics.$topicId'
 import { Route as QuizzesQuizIdRouteImport } from './routes/quizzes.$quizId'
 import { Route as TopicsTopicIdModulesModuleIdRouteImport } from './routes/topics.$topicId.modules.$moduleId'
@@ -20,11 +20,6 @@ import { Route as TopicsTopicIdFinalExamLevelIdRouteImport } from './routes/topi
 import { Route as TopicsTopicIdModulesModuleIdExamRouteImport } from './routes/topics.$topicId.modules.$moduleId.exam'
 import { Route as TopicsTopicIdModulesModuleIdQuizQuizIdRouteImport } from './routes/topics.$topicId.modules.$moduleId.quiz.$quizId'
 
-const QuizzesRoute = QuizzesRouteImport.update({
-  id: '/quizzes',
-  path: '/quizzes',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -40,15 +35,20 @@ const TopicsIndexRoute = TopicsIndexRouteImport.update({
   path: '/topics/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuizzesIndexRoute = QuizzesIndexRouteImport.update({
+  id: '/quizzes/',
+  path: '/quizzes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TopicsTopicIdRoute = TopicsTopicIdRouteImport.update({
   id: '/topics/$topicId',
   path: '/topics/$topicId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizzesQuizIdRoute = QuizzesQuizIdRouteImport.update({
-  id: '/$quizId',
-  path: '/$quizId',
-  getParentRoute: () => QuizzesRoute,
+  id: '/quizzes/$quizId',
+  path: '/quizzes/$quizId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const TopicsTopicIdModulesModuleIdRoute =
   TopicsTopicIdModulesModuleIdRouteImport.update({
@@ -78,9 +78,9 @@ const TopicsTopicIdModulesModuleIdQuizQuizIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
-  '/quizzes': typeof QuizzesRouteWithChildren
   '/quizzes/$quizId': typeof QuizzesQuizIdRoute
   '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
+  '/quizzes/': typeof QuizzesIndexRoute
   '/topics/': typeof TopicsIndexRoute
   '/topics/$topicId/final-exam/$levelId': typeof TopicsTopicIdFinalExamLevelIdRoute
   '/topics/$topicId/modules/$moduleId': typeof TopicsTopicIdModulesModuleIdRouteWithChildren
@@ -90,9 +90,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
-  '/quizzes': typeof QuizzesRouteWithChildren
   '/quizzes/$quizId': typeof QuizzesQuizIdRoute
   '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
+  '/quizzes': typeof QuizzesIndexRoute
   '/topics': typeof TopicsIndexRoute
   '/topics/$topicId/final-exam/$levelId': typeof TopicsTopicIdFinalExamLevelIdRoute
   '/topics/$topicId/modules/$moduleId': typeof TopicsTopicIdModulesModuleIdRouteWithChildren
@@ -103,9 +103,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
-  '/quizzes': typeof QuizzesRouteWithChildren
   '/quizzes/$quizId': typeof QuizzesQuizIdRoute
   '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
+  '/quizzes/': typeof QuizzesIndexRoute
   '/topics/': typeof TopicsIndexRoute
   '/topics/$topicId/final-exam/$levelId': typeof TopicsTopicIdFinalExamLevelIdRoute
   '/topics/$topicId/modules/$moduleId': typeof TopicsTopicIdModulesModuleIdRouteWithChildren
@@ -117,9 +117,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/profile'
-    | '/quizzes'
     | '/quizzes/$quizId'
     | '/topics/$topicId'
+    | '/quizzes/'
     | '/topics/'
     | '/topics/$topicId/final-exam/$levelId'
     | '/topics/$topicId/modules/$moduleId'
@@ -129,9 +129,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/profile'
-    | '/quizzes'
     | '/quizzes/$quizId'
     | '/topics/$topicId'
+    | '/quizzes'
     | '/topics'
     | '/topics/$topicId/final-exam/$levelId'
     | '/topics/$topicId/modules/$moduleId'
@@ -141,9 +141,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/profile'
-    | '/quizzes'
     | '/quizzes/$quizId'
     | '/topics/$topicId'
+    | '/quizzes/'
     | '/topics/'
     | '/topics/$topicId/final-exam/$levelId'
     | '/topics/$topicId/modules/$moduleId'
@@ -154,20 +154,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProfileRoute: typeof ProfileRoute
-  QuizzesRoute: typeof QuizzesRouteWithChildren
+  QuizzesQuizIdRoute: typeof QuizzesQuizIdRoute
   TopicsTopicIdRoute: typeof TopicsTopicIdRouteWithChildren
+  QuizzesIndexRoute: typeof QuizzesIndexRoute
   TopicsIndexRoute: typeof TopicsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/quizzes': {
-      id: '/quizzes'
-      path: '/quizzes'
-      fullPath: '/quizzes'
-      preLoaderRoute: typeof QuizzesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -189,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TopicsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quizzes/': {
+      id: '/quizzes/'
+      path: '/quizzes'
+      fullPath: '/quizzes/'
+      preLoaderRoute: typeof QuizzesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/topics/$topicId': {
       id: '/topics/$topicId'
       path: '/topics/$topicId'
@@ -198,10 +199,10 @@ declare module '@tanstack/react-router' {
     }
     '/quizzes/$quizId': {
       id: '/quizzes/$quizId'
-      path: '/$quizId'
+      path: '/quizzes/$quizId'
       fullPath: '/quizzes/$quizId'
       preLoaderRoute: typeof QuizzesQuizIdRouteImport
-      parentRoute: typeof QuizzesRoute
+      parentRoute: typeof rootRouteImport
     }
     '/topics/$topicId/modules/$moduleId': {
       id: '/topics/$topicId/modules/$moduleId'
@@ -233,17 +234,6 @@ declare module '@tanstack/react-router' {
     }
   }
 }
-
-interface QuizzesRouteChildren {
-  QuizzesQuizIdRoute: typeof QuizzesQuizIdRoute
-}
-
-const QuizzesRouteChildren: QuizzesRouteChildren = {
-  QuizzesQuizIdRoute: QuizzesQuizIdRoute,
-}
-
-const QuizzesRouteWithChildren =
-  QuizzesRoute._addFileChildren(QuizzesRouteChildren)
 
 interface TopicsTopicIdModulesModuleIdRouteChildren {
   TopicsTopicIdModulesModuleIdExamRoute: typeof TopicsTopicIdModulesModuleIdExamRoute
@@ -281,8 +271,9 @@ const TopicsTopicIdRouteWithChildren = TopicsTopicIdRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProfileRoute: ProfileRoute,
-  QuizzesRoute: QuizzesRouteWithChildren,
+  QuizzesQuizIdRoute: QuizzesQuizIdRoute,
   TopicsTopicIdRoute: TopicsTopicIdRouteWithChildren,
+  QuizzesIndexRoute: QuizzesIndexRoute,
   TopicsIndexRoute: TopicsIndexRoute,
 }
 export const routeTree = rootRouteImport
