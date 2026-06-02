@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { getTopicById } from "@/data/mockData";
+import { getTopicById, mockFinalExams } from "@/data/mockData";
+import { useAppStore } from "@/store/useAppStore";
 
 export const Route = createFileRoute("/topics/$topicId")({
   component: TopicOverviewPage,
@@ -8,6 +9,7 @@ export const Route = createFileRoute("/topics/$topicId")({
 function TopicOverviewPage() {
   const { topicId } = Route.useParams();
   const topic = getTopicById(topicId);
+  const { completedModules, isModuleUnlocked } = useAppStore();
 
   if (!topic) {
     return <div className="container-page py-12">Topic not found.</div>;
@@ -33,34 +35,50 @@ function TopicOverviewPage() {
           {topic.modules.length === 0 ? (
             <p className="text-brand-ink/60 font-display font-bold">No modules available yet.</p>
           ) : (
-            topic.modules.map((module, i) => (
-              <Link 
-                key={module.id} 
-                to="/topics/$topicId/modules/$moduleId"
-                params={{ topicId: topic.id, moduleId: module.id }}
-                className="bg-white rounded-2xl p-6 shadow-soft block hover:scale-[1.01] transition-transform border-2 border-transparent hover:border-brand-ink"
-              >
-                <div className="flex justify-between items-center">
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-brand-ink/50 block mb-1">Module {i + 1}</span>
-                    <h3 className="font-display font-black text-xl text-brand-ink">{module.title}</h3>
+            topic.modules.map((module, i) => {
+              const isUnlocked = isModuleUnlocked(topic.id, module.id);
+              const isCompleted = completedModules.includes(module.id);
+
+              return (
+                <Link 
+                  key={module.id} 
+                  to="/topics/$topicId/modules/$moduleId"
+                  params={{ topicId: topic.id, moduleId: module.id }}
+                  disabled={!isUnlocked}
+                  className={`bg-white rounded-2xl p-6 shadow-soft block transition-transform border-2 ${
+                    isUnlocked ? "hover:scale-[1.01] hover:border-brand-ink border-transparent" : "opacity-60 pointer-events-none border-transparent"
+                  }`}
+                >
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="flex items-center gap-3 mb-1">
+                        <span className="text-xs font-bold uppercase tracking-widest text-brand-ink/50">Module {i + 1}</span>
+                        {!isUnlocked && (
+                          <span className="text-[10px] font-bold uppercase tracking-widest bg-brand-ink/10 text-brand-ink/60 px-2 py-0.5 rounded-full">Locked</span>
+                        )}
+                        {isCompleted && (
+                          <span className="text-[10px] font-bold uppercase tracking-widest bg-brand-teal text-white px-2 py-0.5 rounded-full">Completed</span>
+                        )}
+                      </div>
+                      <h3 className="font-display font-black text-xl text-brand-ink">{module.title}</h3>
+                    </div>
+                    <div className={`rounded-full w-10 h-10 flex items-center justify-center ${isUnlocked ? "bg-brand-ink/5 text-brand-ink" : "bg-brand-ink/10 text-brand-ink/40"}`}>
+                      {isUnlocked ? "&rarr;" : "x"}
+                    </div>
                   </div>
-                  <div className="bg-brand-ink/5 rounded-full w-10 h-10 flex items-center justify-center text-brand-ink">
-                    &rarr;
-                  </div>
-                </div>
-              </Link>
-            ))
+                </Link>
+              );
+            })
           )}
         </div>
 
         <div className="md:col-span-1">
           <h2 className="font-display font-black text-3xl text-brand-ink mb-6">Final Exams</h2>
           <div className="bg-brand-ink rounded-[2rem] p-8 shadow-soft flex flex-col gap-4">
-            {topic.finalExams.length === 0 ? (
+            {mockFinalExams.length === 0 ? (
               <p className="text-white/60 font-display font-bold">No final exams available yet.</p>
             ) : (
-              topic.finalExams.map((exam) => (
+              mockFinalExams.map((exam: any) => (
                 <Link
                   key={exam.id}
                   to="/topics/$topicId/final-exam/$levelId"

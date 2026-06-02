@@ -13,7 +13,7 @@ function ModuleExamPage() {
     return <div className="container-page py-12">Module not found.</div>;
   }
 
-  const exam = module.lecture.moduleExam;
+  const exam = module.assessment;
 
   return (
     <div className="container-page py-12 flex justify-center items-center min-h-[calc(100vh-120px)]">

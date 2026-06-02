@@ -10,7 +10,7 @@ function QuizPage() {
   const { topicId, moduleId, quizId } = Route.useParams();
   const router = useRouter();
   const module = getModuleById(topicId, moduleId);
-  const quiz = module?.lecture.inlineQuizzes.find((q) => q.id === quizId);
+  const quiz = module?.assessment.questions.find((q: any) => q.id === quizId);
 
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -36,11 +36,11 @@ function QuizPage() {
         </div>
 
         <h2 className="font-display font-black text-3xl text-brand-ink mb-8 mt-4 leading-tight">
-          {quiz.question}
+          {quiz.text}
         </h2>
 
         <div className="space-y-4 mb-8">
-          {quiz.options.map((option) => (
+          {quiz.options.map((option: string) => (
             <button
               key={option}
               disabled={showResult}

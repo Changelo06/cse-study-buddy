@@ -62,7 +62,8 @@ function DashboardPage() {
           <div className="mt-4 flex items-center justify-between gap-3">
             <p className="text-sm font-bold uppercase tracking-wide text-brand-ink">Last lesson opened</p>
             <Link
-              to="/topics/english/modules/mod-eng-1"
+              to="/topics/$topicId/modules/$moduleId"
+              params={{ topicId: "english", moduleId: "mod-eng-1" }}
               className="rounded-xl bg-brand-pink px-4 py-2 text-sm font-bold uppercase text-white shadow-[3px_3px_0_rgba(45,45,45,0.16)] transition-transform hover:-translate-y-0.5"
             >
               Continue
