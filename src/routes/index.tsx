@@ -5,22 +5,8 @@ export const Route = createFileRoute("/")({
   component: DashboardPage,
 });
 
-const lessonRows = [
-  { name: "English", topicId: "english", modules: 58, quiz: 38, rIndex: 37, trend: "up" },
-  { name: "Filipino", topicId: "filipino", modules: 86, quiz: 82, rIndex: 86, trend: "up" },
-  { name: "Mathematics", topicId: "math", modules: 24, quiz: 9, rIndex: 20, trend: "down" },
-  { name: "Clerical Ops", topicId: "clerical", modules: 62, quiz: 25, rIndex: 56, trend: "up" },
-  { name: "Gen Info", topicId: "geninfo", modules: 79, quiz: 66, rIndex: 79, trend: "up" },
-  { name: "Logic Analysis", topicId: "logic", modules: 12, quiz: 13, rIndex: 15, trend: "down" },
-];
-
-const planActions = [
-  { label: "Ethics & Laws", meta: "Weakness", color: "bg-brand-pink", to: "/topics/ethics", status: true },
-  { label: "Filipino", meta: "Strength", color: "bg-brand-yellow", to: "/topics/filipino", status: true },
-  { label: "Flashcards", color: "bg-brand-blue", to: "/topics" },
-  { label: "Timed challenge", color: "bg-brand-teal", to: "/quizzes" },
-  { label: "Games", color: "bg-brand-purple", to: "/quizzes" },
-];
+import { useAppStore } from "@/store/useAppStore";
+import { mockTopics, mockStandaloneQuizzes } from "@/data/mockData";
 
 function ProgressPill({ value }: { value: number }) {
   return (
@@ -31,12 +17,59 @@ function ProgressPill({ value }: { value: number }) {
 }
 
 function DashboardPage() {
+  const { completedModules, quizResults, getReadinessScore } = useAppStore();
+  const readinessScore = getReadinessScore();
+
+  const lessonRows = mockTopics.map(topic => {
+    const topicModules = topic.modules.length;
+    const completedTopicModules = topic.modules.filter(m => completedModules.includes(m.id)).length;
+    const moduleProgress = topicModules > 0 ? Math.round((completedTopicModules / topicModules) * 100) : 0;
+
+    const topicQuizzes = mockStandaloneQuizzes.filter(q => q.topicId === topic.id);
+    let quizScoreSum = 0;
+    let quizzesAttempted = 0;
+    topicQuizzes.forEach(q => {
+      const result = quizResults[q.id];
+      if (result) {
+        quizzesAttempted++;
+        quizScoreSum += Math.round((result.score / result.total) * 100);
+      }
+    });
+    
+    const quizProgress = topicQuizzes.length > 0 ? Math.round((quizzesAttempted / topicQuizzes.length) * 100) : 0;
+    const rIndex = quizzesAttempted > 0 ? Math.round(quizScoreSum / quizzesAttempted) : 0;
+    
+    return {
+      name: topic.title,
+      topicId: topic.id,
+      modules: moduleProgress,
+      quiz: quizProgress,
+      rIndex,
+      trend: rIndex >= 70 ? "up" : "down"
+    };
+  });
+
+  const totalCompletedModules = completedModules.length;
+  const totalQuizzes = Object.keys(quizResults).length;
+
+  const validRows = lessonRows.filter(r => r.modules > 0 || r.quiz > 0 || r.name === "English" || r.name === "Mathematics");
+  const weakestTopic = [...validRows].sort((a, b) => a.rIndex - b.rIndex)[0] || lessonRows[0];
+  const strongestTopic = [...validRows].sort((a, b) => b.rIndex - a.rIndex)[0] || lessonRows[1];
+
+  const planActions = [
+    { label: weakestTopic?.name || "Ethics & Laws", meta: "Weakness", color: "bg-brand-pink", to: `/topics/${weakestTopic?.topicId || "ethics"}`, status: true },
+    { label: strongestTopic?.name || "Filipino", meta: "Strength", color: "bg-brand-yellow", to: `/topics/${strongestTopic?.topicId || "filipino"}`, status: true },
+    { label: "Flashcards", color: "bg-brand-blue", to: "/topics" },
+    { label: "Timed challenge", color: "bg-brand-teal", to: "/quizzes" },
+    { label: "Games", color: "bg-brand-purple", to: "/quizzes" },
+  ];
+
   return (
     <main className="container-page relative pb-8 pt-3 md:pb-12">
       <PageDoodles variant="dashboard" />
       <section className="relative z-10 grid grid-cols-1 gap-4 lg:grid-cols-[170px_230px_minmax(330px,1fr)_minmax(330px,1fr)] lg:gap-5">
         <div className="flex min-h-[138px] flex-col items-center justify-center rounded-[1.45rem] bg-brand-teal p-4 shadow-sticker">
-          <div className="font-display text-6xl font-black leading-none text-cartoon md:text-[4.6rem]">98.2</div>
+          <div className="font-display text-6xl font-black leading-none text-cartoon md:text-[4.6rem]">{readinessScore}</div>
           <p className="mt-3 text-center text-sm font-bold uppercase leading-4 text-brand-ink">
             Readiness
             <br />
@@ -46,11 +79,11 @@ function DashboardPage() {
 
         <div className="grid min-h-[138px] grid-cols-2 overflow-hidden rounded-[1.45rem] bg-brand-pink shadow-sticker">
           <div className="flex flex-col items-center justify-center border-r-2 border-brand-ink/55 px-4 py-5">
-            <span className="font-display text-6xl font-black leading-none text-cartoon md:text-[4.6rem]">30</span>
+            <span className="font-display text-6xl font-black leading-none text-cartoon md:text-[4.6rem]">{totalCompletedModules}</span>
             <span className="mt-3 text-sm font-bold uppercase text-brand-ink">Modules</span>
           </div>
           <div className="flex flex-col items-center justify-center px-4 py-5">
-            <span className="font-display text-6xl font-black leading-none text-cartoon md:text-[4.6rem]">13</span>
+            <span className="font-display text-6xl font-black leading-none text-cartoon md:text-[4.6rem]">{totalQuizzes}</span>
             <span className="mt-3 text-sm font-bold uppercase text-brand-ink">Tests</span>
           </div>
         </div>

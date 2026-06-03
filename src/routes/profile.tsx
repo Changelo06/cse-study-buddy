@@ -1,45 +1,85 @@
-import { useState, type ReactNode } from "react";
+import { useState, type ReactNode, useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageDoodles } from "@/components/Doodles";
+import { useAppStore } from "@/store/useAppStore";
+import { mockTopics, mockStandaloneQuizzes } from "@/data/mockData";
+import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
 
 export const Route = createFileRoute("/profile")({
   component: ProfilePage,
 });
 
-const profile = {
-  name: "Juan Dela Cruz",
-  role: "Civil Service Reviewer",
-  examTrack: "Professional Track",
-  learnerId: "CSE-READY-2026-014",
-  readinessScore: 78,
-  modulesCompleted: 14,
-  totalModules: 30,
-  quizzesCompleted: 5,
-  averageScore: 82,
-  averageTimePerItem: "48s",
-  status: "Active Learner",
-  strongestSubjects: ["General Information", "English"],
-  weakestSubjects: ["Math + Logic", "Ethics"],
-  recommendedLessons: ["Percentages Application", "Number Series", "RA 6713: Norms of Conduct"],
-  studyPlan: ["Review Math + Logic", "Take one easy quiz", "Review wrong answers"],
-  subjectScores: [
-    { label: "English", short: "ENG", score: 84, color: "bg-brand-blue", hex: "#4a78f5" },
-    { label: "Filipino", short: "FIL", score: 76, color: "bg-brand-yellow", hex: "#f6bb39" },
-    { label: "Math + Logic", short: "MATH", score: 62, color: "bg-brand-pink", hex: "#ff4f6a" },
-    { label: "Clerical", short: "CLK", score: 80, color: "bg-brand-teal", hex: "#3fcaba" },
-    { label: "General Info", short: "GEN", score: 88, color: "bg-[#ff3f77]", hex: "#ff3f77" },
-    { label: "Ethics", short: "ETH", score: 66, color: "bg-brand-orange", hex: "#ff9d3a" },
-  ],
-  quizReadiness: [
-    { label: "Numerical", score: 68, color: "bg-brand-pink" },
-    { label: "Analytical", score: 74, color: "bg-brand-orange" },
-    { label: "Verbal", score: 86, color: "bg-brand-blue" },
-    { label: "Gen Info", score: 91, color: "bg-[#ff3f77]" },
-  ],
-  finalExamCompleted: false,
-};
+function useProfileData() {
+  const { completedModules, quizResults, getReadinessScore } = useAppStore();
+  
+  const data = useMemo(() => {
+    let totalModules = 0;
+    mockTopics.forEach(t => totalModules += t.modules.length);
+
+    const subjectScores = mockTopics.map(topic => {
+      const topicQuizzes = mockStandaloneQuizzes.filter(q => q.topicId === topic.id);
+      let quizScoreSum = 0;
+      let quizzesAttempted = 0;
+      topicQuizzes.forEach(q => {
+        const result = quizResults[q.id];
+        if (result) {
+          quizzesAttempted++;
+          quizScoreSum += Math.round((result.score / result.total) * 100);
+        }
+      });
+      const score = quizzesAttempted > 0 ? Math.round(quizScoreSum / quizzesAttempted) : 0;
+      return {
+        label: topic.title,
+        short: topic.title.substring(0, 4).toUpperCase(),
+        score,
+        color: topic.bgColor,
+        hex: topic.bgColor === "bg-brand-blue" ? "#4a78f5" : topic.bgColor === "bg-brand-yellow" ? "#f6bb39" : topic.bgColor === "bg-brand-pink" ? "#ff4f6a" : topic.bgColor === "bg-brand-teal" ? "#3fcaba" : topic.bgColor === "bg-brand-orange" ? "#ff9d3a" : "#ff3f77" 
+      };
+    });
+
+    const validScores = subjectScores.filter(s => s.score > 0);
+    const sorted = [...subjectScores].sort((a,b) => b.score - a.score);
+    const strongestSubjects = sorted.slice(0, 2).map(s => s.label);
+    const weakestSubjects = [...subjectScores].sort((a,b) => a.score - b.score).slice(0, 2).map(s => s.label);
+    
+    let totalTime = 0;
+    let totalItems = 0;
+    Object.values(quizResults).forEach(res => {
+      totalTime += res.timeSpentSeconds;
+      totalItems += res.total;
+    });
+    const avgTime = totalItems > 0 ? Math.round(totalTime / totalItems) : 0;
+    
+    const overallAvg = validScores.length > 0 ? Math.round(validScores.reduce((acc, curr) => acc + curr.score, 0) / validScores.length) : 0;
+
+    return {
+      name: "Juan Dela Cruz",
+      role: "Civil Service Reviewer",
+      examTrack: "Professional Track",
+      learnerId: "CSE-READY-2026-014",
+      readinessScore: getReadinessScore(),
+      modulesCompleted: completedModules.length,
+      totalModules,
+      quizzesCompleted: Object.keys(quizResults).length,
+      averageScore: overallAvg,
+      averageTimePerItem: avgTime > 0 ? `${avgTime}s` : "0s",
+      status: "Active Learner",
+      strongestSubjects: strongestSubjects.length > 0 ? strongestSubjects : ["None yet"],
+      weakestSubjects: weakestSubjects.length > 0 ? weakestSubjects : ["None yet"],
+      recommendedLessons: ["Percentages Application", "Number Series", "RA 6713"],
+      studyPlan: ["Review " + (weakestSubjects[0] || "Math"), "Take one easy quiz", "Review wrong answers"],
+      subjectScores,
+      quizReadiness: validScores.length > 0 ? validScores : subjectScores
+    };
+  }, [completedModules, quizResults, getReadinessScore]);
+
+  return data;
+}
+
+type ProfileData = ReturnType<typeof useProfileData>;
 
 function ProfilePage() {
+  const profile = useProfileData();
   return (
     <main className="container-page relative pb-6 pt-1 md:pb-8">
       <PageDoodles variant="profile" />
@@ -53,13 +93,13 @@ function ProfilePage() {
           </p>
         </div>
 
-        <SwitchProfileCard />
+        <SwitchProfileCard profile={profile} />
       </section>
     </main>
   );
 }
 
-function SwitchProfileCard() {
+function SwitchProfileCard({ profile }: { profile: ProfileData }) {
   const [view, setView] = useState<"front" | "back">("front");
   const isBack = view === "back";
   const toggleView = () => setView((current) => (current === "front" ? "back" : "front"));
@@ -84,22 +124,22 @@ function SwitchProfileCard() {
             isBack ? "pointer-events-none translate-y-2 opacity-0" : "translate-y-0 opacity-100"
           }`}
         >
-          <ProfileCardFront onToggle={toggleView} />
+          <ProfileCardFront profile={profile} onToggle={toggleView} />
         </div>
         <div
           className={`absolute inset-0 transition-all duration-300 ${
             isBack ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"
           }`}
         >
-          <ProfileCardBack onToggle={toggleView} />
+          <ProfileCardBack profile={profile} onToggle={toggleView} />
         </div>
       </div>
     </section>
   );
 }
 
-function ProfileCardFront({ onToggle }: { onToggle: () => void }) {
-  const progress = Math.round((profile.modulesCompleted / profile.totalModules) * 100);
+function ProfileCardFront({ profile, onToggle }: { profile: ProfileData; onToggle: () => void }) {
+  const progress = profile.totalModules > 0 ? Math.round((profile.modulesCompleted / profile.totalModules) * 100) : 0;
 
   return (
     <article className="relative flex h-full flex-col overflow-hidden bg-[#fff9e7] text-brand-ink">
@@ -174,7 +214,7 @@ function ProfileCardFront({ onToggle }: { onToggle: () => void }) {
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-ink/45">Status label</p>
-                  <p className="text-base font-black">On track, review Math + Logic</p>
+                  <p className="text-base font-black">On track, focus on {profile.weakestSubjects[0] || 'consistency'}</p>
                 </div>
                 <span className="rounded-full bg-white px-3 py-1 text-[11px] font-black uppercase text-brand-ink/70">
                   Estimate, not a guarantee
@@ -188,7 +228,7 @@ function ProfileCardFront({ onToggle }: { onToggle: () => void }) {
               <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-ink/45">Subject mastery strip</p>
               <p className="text-[10px] font-black uppercase text-brand-ink/45">Tap card to switch</p>
             </div>
-            <SubjectMasteryStrip />
+            <SubjectMasteryStrip profile={profile} />
           </div>
         </section>
       </div>
@@ -204,7 +244,7 @@ function ProfileCardFront({ onToggle }: { onToggle: () => void }) {
   );
 }
 
-function ProfileCardBack({ onToggle }: { onToggle: () => void }) {
+function ProfileCardBack({ profile, onToggle }: { profile: ProfileData; onToggle: () => void }) {
   return (
     <article className="relative flex h-full flex-col overflow-hidden bg-[#fff8df] text-brand-ink">
       <CardWatermark />
@@ -221,17 +261,21 @@ function ProfileCardBack({ onToggle }: { onToggle: () => void }) {
       </header>
 
       <div className="relative z-10 grid flex-1 gap-0 lg:grid-cols-[52%_48%]">
-        <section className="border-b-2 border-brand-ink/10 p-4 md:p-5 lg:border-b-0 lg:border-r-2">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-ink/45">Subject performance</p>
-              <h3 className="text-xl font-black">Mastery map</h3>
+        <section className="border-b-2 border-brand-ink/10 p-4 md:p-5 lg:border-b-0 lg:border-r-2 flex flex-col justify-between">
+          <div>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-ink/45">Subject performance</p>
+                <h3 className="text-xl font-black">Mastery map</h3>
+              </div>
+              <span className="rounded-full bg-brand-cream px-3 py-1 text-[10px] font-black uppercase text-brand-ink/60">
+                Updated: Today
+              </span>
             </div>
-            <span className="rounded-full bg-brand-cream px-3 py-1 text-[10px] font-black uppercase text-brand-ink/60">
-              Updated: Today
-            </span>
+            
+            {/* Recharts integration for Subject Performance */}
+            <SubjectPerformanceRows profile={profile} />
           </div>
-          <SubjectPerformanceRows />
 
           <div className="mt-3 grid grid-cols-6 overflow-hidden rounded-full border-2 border-white shadow-[2px_2px_0_rgba(45,45,45,0.06)]">
             {profile.subjectScores.map((subject) => (
@@ -241,7 +285,9 @@ function ProfileCardBack({ onToggle }: { onToggle: () => void }) {
           <p className="mt-2 text-[10px] font-black uppercase tracking-wide text-brand-ink/45">
             Color legend: ENG - FIL - MATH - CLK - GEN - ETH
           </p>
-          <QuizReadinessIndex />
+          
+          {/* Recharts integration for Quiz Readiness */}
+          <QuizReadinessIndex profile={profile} />
         </section>
 
         <section className="grid content-between gap-3 p-4 md:p-5">
@@ -318,7 +364,7 @@ function IdField({ color = "text-brand-ink", label, value }: { color?: string; l
   );
 }
 
-function SubjectMasteryStrip() {
+function SubjectMasteryStrip({ profile }: { profile: ProfileData }) {
   return (
     <div className="overflow-hidden rounded-[0.9rem] border-2 border-white bg-white/72 shadow-[3px_3px_0_rgba(45,45,45,0.06)]">
       <div className="grid grid-cols-6">
@@ -333,52 +379,52 @@ function SubjectMasteryStrip() {
   );
 }
 
-function SubjectPerformanceRows() {
+function SubjectPerformanceRows({ profile }: { profile: ProfileData }) {
   return (
-    <div className="grid gap-2">
-      {profile.subjectScores.map((subject) => (
-        <div key={subject.label} className="grid grid-cols-[7.2rem_1fr_2.4rem] items-center gap-2 text-xs font-black">
-          <span className="truncate">{subject.label}</span>
-          <div className="h-3 overflow-hidden rounded-full bg-[#eadfb7]">
-            <div className={`h-full rounded-full ${subject.color}`} style={{ width: `${subject.score}%` }} />
-          </div>
-          <span className="text-right">{subject.score}%</span>
-        </div>
-      ))}
+    <div className="h-44 w-full mt-1">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={profile.subjectScores} layout="vertical" margin={{ top: 0, right: 30, left: -20, bottom: 0 }}>
+          <XAxis type="number" domain={[0, 100]} hide />
+          <YAxis dataKey="short" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#1e293b', fontWeight: 'bold' }} />
+          <Tooltip 
+            cursor={{ fill: 'rgba(0,0,0,0.05)' }} 
+            contentStyle={{ borderRadius: '12px', fontWeight: 'bold', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} 
+            formatter={(value: number) => [`${value}%`, 'Score']}
+          />
+          <Bar dataKey="score" radius={[0, 8, 8, 0]} barSize={14}>
+            {profile.subjectScores.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.hex} />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 }
 
-function QuizReadinessIndex() {
-  const highest = profile.quizReadiness.reduce((top, item) => (item.score > top.score ? item : top));
-
+function QuizReadinessIndex({ profile }: { profile: ProfileData }) {
   return (
-    <div className="mt-5">
-      <div className="mb-2 flex items-start justify-between gap-2">
+    <div className="mt-4">
+      <div className="mb-1 flex items-start justify-between gap-2">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-ink/45">Quiz readiness index</p>
-          <p className="text-[10px] font-black leading-tight text-brand-ink/58">Summed quiz scores, ranked 1-100.</p>
+          <p className="text-[10px] font-black leading-tight text-brand-ink/58">Subject performance radar.</p>
         </div>
-        <span className="rounded-full bg-brand-purple px-2.5 py-1 text-[9px] font-black uppercase leading-none text-brand-ink">
-          Top {highest.score}
-        </span>
       </div>
 
-      <div className="grid h-24 grid-cols-4 items-end gap-2 border-b-2 border-l-2 border-brand-ink/12 pb-1 pl-2">
-        {profile.quizReadiness.map((item) => (
-          <div key={item.label} className="flex h-full flex-col items-center justify-end gap-1">
-            <span className="text-[10px] font-black leading-none text-brand-ink">{item.score}</span>
-            <div className="flex h-14 w-full items-end justify-center px-1">
-              <div
-                className={`w-full max-w-8 rounded-t-lg ${item.color} shadow-[inset_0_2px_0_rgba(255,255,255,0.35)]`}
-                style={{ height: `${item.score}%` }}
-              />
-            </div>
-            <span className="text-center text-[10px] font-black uppercase leading-none text-brand-ink/58">
-              {item.label}
-            </span>
-          </div>
-        ))}
+      <div className="h-44 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <RadarChart cx="50%" cy="50%" outerRadius="65%" data={profile.quizReadiness}>
+            <PolarGrid stroke="#e2e8f0" />
+            <PolarAngleAxis dataKey="short" tick={{ fill: '#1e293b', fontSize: 10, fontWeight: 'bold' }} />
+            <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+            <Radar name="Readiness" dataKey="score" stroke="#4a78f5" strokeWidth={2} fill="#4a78f5" fillOpacity={0.3} />
+            <Tooltip 
+              contentStyle={{ borderRadius: '12px', fontWeight: 'bold', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+              formatter={(value: number) => [`${value}%`, 'Readiness']}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
