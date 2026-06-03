@@ -1,14 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
+import { useAuth } from "@/hooks/useAuth";
+import { isSupabaseConfigured } from "@/lib/supabase";
+import { LogIn, LogOut, Shield, User } from "lucide-react";
 
 export function FloatingNav() {
   const location = useLocation();
   const lastScrollY = useRef(0);
   const [isHidden, setIsHidden] = useState(false);
+  const { user, isAdmin, signOut } = useAuth();
+  const supabaseActive = isSupabaseConfigured();
 
   const links = [
     { label: "Home", to: "/" },
-    { label: "Lessons", to: "/topics" },
+    { label: "Lessons", to: "/lessons" },
     { label: "Quizzes", to: "/quizzes" },
     { label: "Profile", to: "/profile" },
   ];
@@ -27,6 +32,14 @@ export function FloatingNav() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (err) {
+      console.error("Sign out error:", err);
+    }
+  };
 
   return (
     <div
@@ -61,9 +74,52 @@ export function FloatingNav() {
             </Link>
           );
         })}
+
+        {/* Admin link - only visible to admins */}
+        {isAdmin && (
+          <Link
+            to="/admin"
+            className={`rounded-full px-3.5 py-1.5 text-sm font-bold transition-colors md:px-5 md:py-2 md:text-lg flex items-center gap-1.5 ${
+              location.pathname.startsWith("/admin")
+                ? "bg-brand-purple text-brand-ink shadow-[inset_0_-2px_0_rgba(45,45,45,0.08)]"
+                : "text-brand-ink hover:bg-black/5"
+            }`}
+          >
+            <Shield size={16} strokeWidth={3} />
+            Admin
+          </Link>
+        )}
       </div>
 
-      <div className="w-56 md:w-72" />
+      {/* Auth section */}
+      <div className="relative z-10 flex w-56 items-center justify-end gap-2 md:w-72">
+        {supabaseActive && user ? (
+          <div className="flex items-center gap-2">
+            <Link
+              to="/profile"
+              className="flex items-center gap-2 rounded-full border-2 border-brand-ink/15 bg-white px-4 py-2 text-sm font-bold text-brand-ink transition-colors hover:border-brand-ink/30"
+            >
+              <User size={16} strokeWidth={3} />
+              <span className="hidden md:inline">{user.email?.split("@")[0]}</span>
+            </Link>
+            <button
+              onClick={handleSignOut}
+              className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-brand-ink/15 bg-white text-brand-ink/60 transition-colors hover:border-brand-pink hover:text-brand-pink"
+              title="Sign Out"
+            >
+              <LogOut size={16} strokeWidth={3} />
+            </button>
+          </div>
+        ) : supabaseActive ? (
+          <Link
+            to="/login"
+            className="flex items-center gap-2 rounded-full border-2 border-brand-ink bg-brand-blue px-5 py-2 text-sm font-bold text-white shadow-[2px_2px_0_rgba(45,45,45,0.1)] transition-transform hover:-translate-y-0.5"
+          >
+            <LogIn size={16} strokeWidth={3} />
+            Log In
+          </Link>
+        ) : null}
+      </div>
     </div>
   );
 }

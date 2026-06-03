@@ -54,6 +54,7 @@ Visually feel like a friendly learning dashboard inspired by course platforms, n
   - Clean sans-serif fallback for long reading sections.
 
 ## 6. Content Direction & User Integrity
+- **Scope**: Lessons are strictly aligned with the CSE coverage: **English, Mathematics, Logic Analysis, Filipino, Clerical Ops, General Info**.
 - Lessons must be structured/reviewed by humans. AI can assist but requires review.
 - References should prioritize official and credible sources (e.g., Constitution, RA 6713).
 - **Anti-Cheating**: Lock answers until completion, timed quizzes, track retakes, show answer keys only after submission.

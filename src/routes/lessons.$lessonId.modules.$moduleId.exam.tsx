@@ -1,13 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { getModuleById } from "@/data/mockData";
 
-export const Route = createFileRoute("/topics/$topicId/modules/$moduleId/exam")({
+export const Route = createFileRoute("/lessons/$lessonId/modules/$moduleId/exam")({
   component: ModuleExamPage,
 });
 
 function ModuleExamPage() {
-  const { topicId, moduleId } = Route.useParams();
-  const module = getModuleById(topicId, moduleId);
+  const { lessonId, moduleId } = Route.useParams();
+  const module = getModuleById(lessonId, moduleId);
 
   if (!module) {
     return <div className="container-page py-12">Module not found.</div>;
@@ -50,7 +50,7 @@ function ModuleExamPage() {
           Start Exam
         </button>
 
-        <Link to="/topics/$topicId/modules/$moduleId" params={{ topicId, moduleId }} className="text-white/60 hover:text-white font-display font-bold inline-block">
+        <Link to="/lessons/$lessonId/modules/$moduleId" params={{ lessonId, moduleId }} className="text-white/60 hover:text-white font-display font-bold inline-block">
           Not ready? Go back to lecture
         </Link>
       </div>

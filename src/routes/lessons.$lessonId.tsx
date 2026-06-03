@@ -1,23 +1,24 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { getTopicById, mockFinalExams } from "@/data/mockData";
 import { useAppStore } from "@/store/useAppStore";
+import { ArrowRight, Lock } from "lucide-react";
 
-export const Route = createFileRoute("/topics/$topicId")({
-  component: TopicOverviewPage,
+export const Route = createFileRoute("/lessons/$lessonId")({
+  component: LessonOverviewPage,
 });
 
-function TopicOverviewPage() {
-  const { topicId } = Route.useParams();
-  const topic = getTopicById(topicId);
+function LessonOverviewPage() {
+  const { lessonId } = Route.useParams();
+  const topic = getTopicById(lessonId);
   const { completedModules, isModuleUnlocked } = useAppStore();
 
   if (!topic) {
-    return <div className="container-page py-12">Topic not found.</div>;
+    return <div className="container-page py-12">Lesson not found.</div>;
   }
 
   return (
     <div className="container-page py-12">
-      <Link to="/topics" className="text-brand-ink/60 hover:text-brand-ink mb-8 inline-block font-display font-bold">
+      <Link to="/lessons" className="text-brand-ink/60 hover:text-brand-ink mb-8 inline-block font-display font-bold">
         &larr; Back to Lessons
       </Link>
       
@@ -42,8 +43,8 @@ function TopicOverviewPage() {
               return (
                 <Link 
                   key={module.id} 
-                  to="/topics/$topicId/modules/$moduleId"
-                  params={{ topicId: topic.id, moduleId: module.id }}
+                  to="/lessons/$lessonId/modules/$moduleId"
+                  params={{ lessonId: topic.id, moduleId: module.id }}
                   disabled={!isUnlocked}
                   className={`bg-white rounded-2xl p-6 shadow-soft block transition-transform border-2 ${
                     isUnlocked ? "hover:scale-[1.01] hover:border-brand-ink border-transparent" : "opacity-60 pointer-events-none border-transparent"
@@ -63,7 +64,7 @@ function TopicOverviewPage() {
                       <h3 className="font-display font-black text-xl text-brand-ink">{module.title}</h3>
                     </div>
                     <div className={`rounded-full w-10 h-10 flex items-center justify-center ${isUnlocked ? "bg-brand-ink/5 text-brand-ink" : "bg-brand-ink/10 text-brand-ink/40"}`}>
-                      {isUnlocked ? "&rarr;" : "x"}
+                      {isUnlocked ? <ArrowRight size={20} strokeWidth={3} /> : <Lock size={16} strokeWidth={3} />}
                     </div>
                   </div>
                 </Link>
@@ -81,8 +82,8 @@ function TopicOverviewPage() {
               mockFinalExams.map((exam: any) => (
                 <Link
                   key={exam.id}
-                  to="/topics/$topicId/final-exam/$levelId"
-                  params={{ topicId: topic.id, levelId: exam.id }}
+                  to="/lessons/$lessonId/final-exam/$levelId"
+                  params={{ lessonId: topic.id, levelId: exam.id }}
                   className="bg-white/10 hover:bg-white/20 transition-colors rounded-xl p-4 flex flex-col"
                 >
                   <span className="text-white font-display font-bold uppercase tracking-wider text-sm mb-1">{exam.id} Level</span>

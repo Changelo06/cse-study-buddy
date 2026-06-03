@@ -1,6 +1,6 @@
 import crypto from "crypto";
 if (!("hash" in crypto)) {
-  (crypto as any).hash = (algo: string, data: import("crypto").BinaryLike, enc: import("crypto").BinaryToTextEncoding = "hex") => 
+  (crypto as any).hash = (algo: string, data: import("crypto").BinaryLike, enc: import("crypto").BinaryToTextEncoding = "hex") =>
     crypto.createHash(algo).update(data as any).digest(enc);
 }
 

@@ -57,9 +57,9 @@ function DashboardPage() {
   const strongestTopic = [...validRows].sort((a, b) => b.rIndex - a.rIndex)[0] || lessonRows[1];
 
   const planActions = [
-    { label: weakestTopic?.name || "Ethics & Laws", meta: "Weakness", color: "bg-brand-pink", to: `/topics/${weakestTopic?.topicId || "ethics"}`, status: true },
-    { label: strongestTopic?.name || "Filipino", meta: "Strength", color: "bg-brand-yellow", to: `/topics/${strongestTopic?.topicId || "filipino"}`, status: true },
-    { label: "Flashcards", color: "bg-brand-blue", to: "/topics" },
+    { label: weakestTopic?.name || "Ethics & Laws", meta: "Weakness", color: "bg-brand-pink", to: `/lessons/${weakestTopic?.topicId || "ethics"}`, status: true },
+    { label: strongestTopic?.name || "Filipino", meta: "Strength", color: "bg-brand-yellow", to: `/lessons/${strongestTopic?.topicId || "filipino"}`, status: true },
+    { label: "Flashcards", color: "bg-brand-blue", to: "/lessons" },
     { label: "Timed challenge", color: "bg-brand-teal", to: "/quizzes" },
     { label: "Games", color: "bg-brand-purple", to: "/quizzes" },
   ];
@@ -95,8 +95,8 @@ function DashboardPage() {
           <div className="mt-4 flex items-center justify-between gap-3">
             <p className="text-sm font-bold uppercase tracking-wide text-brand-ink">Last lesson opened</p>
             <Link
-              to="/topics/$topicId/modules/$moduleId"
-              params={{ topicId: "english", moduleId: "mod-eng-1" }}
+              to="/lessons/$lessonId/modules/$moduleId"
+              params={{ lessonId: "english", moduleId: "mod-eng-1" }}
               className="rounded-xl bg-brand-pink px-4 py-2 text-sm font-bold uppercase text-white shadow-[3px_3px_0_rgba(45,45,45,0.16)] transition-transform hover:-translate-y-0.5"
             >
               Continue
@@ -125,7 +125,7 @@ function DashboardPage() {
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <h1 className="text-3xl font-bold text-brand-ink md:text-[2.35rem]">My Lessons</h1>
             <Link
-              to="/topics"
+              to="/lessons"
               className="border-b-2 border-brand-pink text-sm font-bold text-brand-pink"
             >
               View Lessons
@@ -160,8 +160,8 @@ function DashboardPage() {
                   </span>
                 </div>
                 <Link
-                  to="/topics/$topicId"
-                  params={{ topicId: lesson.topicId }}
+                  to="/lessons/$lessonId"
+                  params={{ lessonId: lesson.topicId }}
                   className="grid h-7 w-7 place-items-center rounded-full bg-brand-ink/65 text-lg font-black text-white transition-transform hover:-translate-y-0.5"
                   aria-label={`Open ${lesson.name}`}
                 >

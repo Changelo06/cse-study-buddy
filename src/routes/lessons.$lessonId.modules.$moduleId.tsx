@@ -2,15 +2,15 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { getModuleById, getTopicById } from "@/data/mockData";
 import { useAppStore } from "@/store/useAppStore";
 
-export const Route = createFileRoute("/topics/$topicId/modules/$moduleId")({
+export const Route = createFileRoute("/lessons/$lessonId/modules/$moduleId")({
   component: ModuleReadingPage,
 });
 
 function ModuleReadingPage() {
-  const { topicId, moduleId } = Route.useParams();
+  const { lessonId, moduleId } = Route.useParams();
   const router = useRouter();
-  const topic = getTopicById(topicId);
-  const module = getModuleById(topicId, moduleId);
+  const topic = getTopicById(lessonId);
+  const module = getModuleById(lessonId, moduleId);
   
   const { markModuleAsRead, readModules, completedModules } = useAppStore();
 
@@ -24,19 +24,19 @@ function ModuleReadingPage() {
   const handleMarkComplete = () => {
     markModuleAsRead(moduleId);
     router.navigate({ 
-      to: "/topics/$topicId/modules/$moduleId/exam",
-      params: { topicId, moduleId }
+      to: "/lessons/$lessonId/modules/$moduleId/exam",
+      params: { lessonId, moduleId }
     });
   };
 
   return (
     <main className="container-page pb-10 pt-3 md:pb-14 max-w-4xl">
       <nav className="flex flex-wrap items-center gap-2 text-sm font-bold text-brand-ink/55 mb-6">
-        <Link to="/topics" className="hover:text-brand-ink">
+        <Link to="/lessons" className="hover:text-brand-ink">
           Lessons
         </Link>
         <span>&gt;</span>
-        <Link to="/topics/$topicId" params={{ topicId }} className="hover:text-brand-ink">
+        <Link to="/lessons/$lessonId" params={{ lessonId }} className="hover:text-brand-ink">
           {topic.title}
         </Link>
         <span>&gt;</span>

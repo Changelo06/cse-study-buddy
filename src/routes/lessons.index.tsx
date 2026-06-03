@@ -3,8 +3,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageDoodles } from "@/components/Doodles";
 import { mockTopics } from "@/data/mockData";
 import { useAppStore } from "@/store/useAppStore";
+import { ArrowRight, ChevronUp, ChevronDown } from "lucide-react";
 
-export const Route = createFileRoute("/topics/")({
+export const Route = createFileRoute("/lessons/")({
   component: LessonsPage,
 });
 
@@ -91,15 +92,15 @@ function CardGrid() {
       {mockTopics.map((card) => (
         <Link
           key={card.id}
-          to="/topics/$topicId"
-          params={{ topicId: card.id }}
+          to="/lessons/$lessonId"
+          params={{ lessonId: card.id }}
           className={`${card.bgColor} group relative min-h-[240px] overflow-hidden rounded-[1.35rem] p-6 shadow-sticker transition-transform hover:-translate-y-1 md:min-h-[250px] xl:min-h-[252px]`}
         >
           <div className="absolute left-5 top-8 text-white/30 text-8xl font-black font-display">{card.icon}</div>
 
           <div className="absolute right-5 top-5 flex items-center gap-1.5 text-base font-bold text-brand-ink/65">
             <span>{card.modules.length} Modules</span>
-            <span className="text-3xl leading-none text-brand-ink/65">&gt;</span>
+            <span className="flex items-center justify-center text-brand-ink/65"><ArrowRight size={24} strokeWidth={3} /></span>
           </div>
 
           <h2 className="absolute bottom-6 left-6 right-6 font-display text-[3.15rem] font-black leading-none text-white drop-shadow-sm md:text-[3.35rem]">
@@ -203,8 +204,8 @@ function LessonsLibrary({
                   </div>
 
                   <span className="text-sm font-black text-brand-ink/70 md:text-right">{progress}%</span>
-                  <span className="text-2xl font-black leading-none text-brand-ink/65 md:text-right">
-                    {isOpen ? "^" : "v"}
+                  <span className="flex items-center justify-center text-brand-ink/65 md:justify-end">
+                    {isOpen ? <ChevronUp size={24} strokeWidth={3} /> : <ChevronDown size={24} strokeWidth={3} />}
                   </span>
                 </button>
 
@@ -236,8 +237,8 @@ function LessonsLibrary({
                             </div>
                             
                             <Link
-                              to="/topics/$topicId/modules/$moduleId"
-                              params={{ topicId: subject.id, moduleId: module.id }}
+                              to="/lessons/$lessonId/modules/$moduleId"
+                              params={{ lessonId: subject.id, moduleId: module.id }}
                               disabled={!isUnlocked}
                               className={`rounded-xl px-5 py-3 text-center text-sm font-bold text-white shadow-[3px_3px_0_rgba(45,45,45,0.12)] md:min-w-28 ${
                                 status === "Locked" ? "bg-brand-ink/35 pointer-events-none" : "bg-brand-blue hover:scale-105 transition-transform"

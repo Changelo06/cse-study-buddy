@@ -2,14 +2,14 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { getModuleById } from "@/data/mockData";
 import { useState } from "react";
 
-export const Route = createFileRoute("/topics/$topicId/modules/$moduleId/quiz/$quizId")({
+export const Route = createFileRoute("/lessons/$lessonId/modules/$moduleId/quiz/$quizId")({
   component: QuizPage,
 });
 
 function QuizPage() {
-  const { topicId, moduleId, quizId } = Route.useParams();
+  const { lessonId, moduleId, quizId } = Route.useParams();
   const router = useRouter();
-  const module = getModuleById(topicId, moduleId);
+  const module = getModuleById(lessonId, moduleId);
   const quiz = module?.assessment.questions.find((q: any) => q.id === quizId);
 
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
