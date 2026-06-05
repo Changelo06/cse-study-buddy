@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { getTopicById, getFinalExamForTopic } from "@/data/mockData";
 import { useAppStore } from "@/store/useAppStore";
 import { ArrowRight, Lock, CheckCircle2, Shield, Zap, Star, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/lessons/$lessonId")({
-  component: LessonOverviewPage,
+  component: LessonLayout,
 });
 
 const tierIcons = { 1: Shield, 2: Zap, 3: Star } as const;
@@ -14,6 +14,25 @@ const tierColors = {
   2: { bg: "bg-brand-orange", text: "text-brand-orange" },
   3: { bg: "bg-brand-pink", text: "text-brand-pink" },
 } as const;
+
+/**
+ * Layout route for /lessons/$lessonId.
+ * When a child route is active (modules, final-exam, etc.), renders <Outlet />.
+ * Otherwise renders the lesson overview page.
+ */
+function LessonLayout() {
+  const matches = useMatches();
+  // If there's a match deeper than this route, a child is active
+  const hasChildRoute = matches.some(
+    (m) => m.routeId !== "/lessons/$lessonId" && m.routeId.startsWith("/lessons/$lessonId/")
+  );
+
+  if (hasChildRoute) {
+    return <Outlet />;
+  }
+
+  return <LessonOverviewPage />;
+}
 
 function LessonOverviewPage() {
   const { lessonId } = Route.useParams();
