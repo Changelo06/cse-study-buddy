@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { mockTopics, mockStandaloneQuizzes } from '../data/mockData';
+import { mockTopics, mockStandaloneQuizzes, getFinalExamForTopic } from '../data/mockData';
 import { saveModuleProgress, saveQuizResult as saveQuizResultApi, fetchUserProgress, fetchUserQuizResults } from '@/lib/api';
 
 type QuizResult = {
@@ -20,6 +20,7 @@ type AppState = {
   readModules: string[];
   assessmentResults: Record<string, QuizResult>; // key: assessment id
   quizResults: Record<string, QuizResult>; // key: quiz id
+  finalExamResults: Record<string, QuizResult>; // key: tier id (e.g. "english-tier-1")
   
   // Actions
   setUserId: (userId: string | null) => void;
@@ -27,6 +28,7 @@ type AppState = {
   markModuleAsRead: (moduleId: string) => void;
   saveAssessmentResult: (assessmentId: string, result: QuizResult) => void;
   saveQuizResult: (quizId: string, result: QuizResult) => void;
+  saveFinalExamResult: (tierId: string, result: QuizResult) => void;
   resetProgress: () => void;
 
   // Hydrate from Supabase
@@ -35,6 +37,8 @@ type AppState = {
   // Derived state calculations (helpers)
   isModuleUnlocked: (topicId: string, moduleId: string) => boolean;
   isQuizUnlocked: (quizId: string) => boolean;
+  isFinalExamUnlocked: (topicId: string) => boolean;
+  isAllTiersPassed: (topicId: string) => boolean;
   getReadinessScore: () => number;
 };
 
@@ -46,6 +50,7 @@ export const useAppStore = create<AppState>()(
       readModules: [],
       assessmentResults: {},
       quizResults: {},
+      finalExamResults: {},
 
       setUserId: (userId) => set({ userId }),
 
@@ -127,11 +132,21 @@ export const useAppStore = create<AppState>()(
         }
       },
 
+      saveFinalExamResult: (tierId, result) => {
+        set((state) => ({
+          finalExamResults: {
+            ...state.finalExamResults,
+            [tierId]: result
+          }
+        }));
+      },
+
       resetProgress: () => set({
         completedModules: [],
         readModules: [],
         assessmentResults: {},
-        quizResults: {}
+        quizResults: {},
+        finalExamResults: {}
       }),
 
       /**
@@ -200,6 +215,28 @@ export const useAppStore = create<AppState>()(
         
         // All required modules must be in completedModules
         return quiz.requiredModuleIds.every(id => get().completedModules.includes(id));
+      },
+
+      /**
+       * Final exam unlocks when ALL modules in the topic are completed.
+       * All 3 tiers unlock simultaneously — user can freely pick any tier.
+       */
+      isFinalExamUnlocked: (topicId) => {
+        const topic = mockTopics.find(t => t.id === topicId);
+        if (!topic || topic.modules.length === 0) return false;
+        return topic.modules.every(m => get().completedModules.includes(m.id));
+      },
+
+      /**
+       * Check if the user has passed all 3 tiers for a given topic's final exam.
+       */
+      isAllTiersPassed: (topicId) => {
+        const exam = getFinalExamForTopic(topicId);
+        if (!exam) return false;
+        return exam.tiers.every(tier => {
+          const result = get().finalExamResults[tier.id];
+          return result?.passed === true;
+        });
       },
 
       getReadinessScore: () => {
