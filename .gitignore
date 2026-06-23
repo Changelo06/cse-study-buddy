@@ -34,3 +34,5 @@ dist-ssr
 src/routeTree.gen.ts
 CSE_Ready_Ultimate_Project_Report.pdf
 .agents/
+
+.env
