@@ -4,6 +4,12 @@ if (!("hash" in crypto)) {
     crypto.createHash(algo).update(data as any).digest(enc);
 }
 
+// @ts-ignore
+import ws from "ws";
+if (typeof globalThis !== "undefined" && !globalThis.WebSocket) {
+  globalThis.WebSocket = (ws as any).default || ws;
+}
+
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import tsConfigPaths from "vite-tsconfig-paths";

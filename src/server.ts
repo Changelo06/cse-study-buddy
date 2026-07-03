@@ -1,3 +1,9 @@
+// @ts-ignore
+import ws from "ws";
+if (typeof globalThis !== "undefined" && !globalThis.WebSocket) {
+  globalThis.WebSocket = (ws as any).default || ws;
+}
+
 import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
